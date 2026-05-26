@@ -9,6 +9,7 @@
  */
 'use strict';
 
+const API_BASE = "https://ahcare-backend.onrender.com";
 /* ── STATE ── */
 const APP = {
   dark: false,
@@ -608,7 +609,7 @@ function confirmAlloc() {
    ============================================================ */
 function loadPatients() {
   const token = localStorage.getItem('ahcare-token');
-  fetch('/api/patients', { headers: token ? { 'Authorization': `Bearer ${token}` } : {} })
+  fetch(`${API_BASE}/api/patients`, { headers: token ? { 'Authorization': `Bearer ${token}` } : {} })
     .then(r => r.json())
     .then(data => {
       if (data.success && data.data && data.data.length > 0) {
@@ -744,7 +745,7 @@ function registerPatient() {
   if (btn) { btn.disabled = true; btn.textContent = 'Registering…'; }
 
   const token = localStorage.getItem('ahcare-token');
-  fetch('/api/patients', {
+  fetch(`${API_BASE}/api/patients`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
     body: JSON.stringify({ name, age: parseInt(age), gender, phone, aadhaar, bloodGroup, address, wardType, diagnosis, severity, attendingDoctor, medicalHistory, isEmergency, govtScheme })
@@ -1476,7 +1477,7 @@ const INSURANCE_DATA = {
 
 function loadBills() {
   const token = localStorage.getItem('ahcare-token');
-  fetch('/api/billing', { headers: token ? { 'Authorization': `Bearer ${token}` } : {} })
+  fetch(`${API_BASE}/api/billing', { headers: token ? { 'Authorization': `Bearer ${token}` } : {} })
     .then(r => r.json())
     .then(data => {
       if (data.success && data.data && data.data.length > 0) {
@@ -1674,7 +1675,7 @@ function createBill() {
   };
 
   const token = localStorage.getItem('ahcare-token');
-  fetch('/api/billing', {
+  fetch(`${API_BASE}/api/billing', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
     body: JSON.stringify(newBill)
@@ -1974,7 +1975,7 @@ function loginUser() {
   const email   = emailEl?.value?.trim() || 'suresh@ahcare.in';
   const password = passEl?.value || 'admin123';
 
-  fetch('/api/auth/login', {
+  fetch(`${API_BASE}/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
@@ -2102,7 +2103,7 @@ function sendChat() {
   addTyping();
 
   // Call backend AI chat API
-  fetch('/api/ai/chat', {
+  fetch(`${API_BASE}/api/ai/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message: msg, lang: APP.lang })
@@ -2191,7 +2192,7 @@ const PRIORITY_BADGES = { Urgent:'pb-urgent', High:'pb-high', Normal:'pb-normal'
 async function loadPrebookingQueue() {
   const token = localStorage.getItem('ahcare-token');
   try {
-    const res = await fetch('/api/prebooking', {
+    const res = await fetch(`${API_BASE}/api/prebooking', {
       headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     });
     const data = await res.json();
@@ -2380,7 +2381,7 @@ async function submitPrebooking() {
   if (btn) { btn.disabled=true; btn.textContent='Booking...'; }
   let bk;
   try {
-    const r = await fetch('/api/prebooking', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const r = await fetch(`${API_BASE}/api/prebooking', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     const data = await r.json();
     bk = data.data || {};
   } catch(e) {
