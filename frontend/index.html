@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="description" content="AH Care v7.0 — AI ward allocation, billing, govt schemes, doctor directory for Adichunchanagiri Hospital, BG Nagar, Mandya, Karnataka.">
+<meta name="theme-color" content="#00875A">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300875A'/><rect x='42' y='18' width='16' height='64' rx='4' fill='white'/><rect x='18' y='42' width='64' height='16' rx='4' fill='white'/></svg>">
+<title>AH Care v7.0 — Adichunchanagiri Hospital, Mandya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<header id="topbar">
+  <button id="ham" onclick="openSidebar()" aria-label="Menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="logo-wrap" onclick="showScreen('dashboard')" style="cursor:pointer">
+    <svg class="ah-logo-svg" viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg" style="height:40px;width:auto;flex-shrink:0">
+      <!-- A shape in teal -->
+      <polygon points="12,58 30,10 42,10 48,28 36,28 36,38 44,38 50,58" fill="#3EC8B4"/>
+      <polygon points="30,10 42,10 54,58 42,58 38,44 34,44 30,58 18,58" fill="#3EC8B4" opacity="0.0"/>
+      <!-- Cleaner A -->
+      <path d="M10,58 L28,8 L42,8 L50,30 L36,30 L36,40 L45,40 L52,58 Z" fill="#3EC8B4"/>
+      <polygon points="24,42 32,18 40,42" fill="#EEF5FF" opacity="0.85"/>
+      <!-- H shape in coral/pink -->
+      <rect x="60" y="8" width="11" height="50" rx="2" fill="#F28B82"/>
+      <rect x="89" y="8" width="11" height="50" rx="2" fill="#F28B82"/>
+      <rect x="60" y="28" width="40" height="11" rx="2" fill="#F28B82"/>
+    </svg>
+    <div>
+      <div class="logo-text"><span>AH</span> Care</div>
+      <div class="logo-sub">Adichunchanagiri Hospital, Mandya</div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <div class="top-icon-btn notif-dot" onclick="showToast('Emergency Alert','Patient Ravi K auto-allocated to ICU-7')" title="Notifications">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+    <div class="top-avatar" id="user-av" title="Logged In User">DR</div>
+  </div>
+</header>
+
+<!-- ===== SIDEBAR ===== -->
+<nav id="sidebar">
+  <div class="sb-section">Main</div>
+  <div class="nav-item active" onclick="showScreen('dashboard')" data-s="dashboard">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+    <span class="nav-lbl">Dashboard</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('aialloc')" data-s="aialloc">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+    <span class="nav-lbl">AI Allocation</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('beds')" data-s="beds">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9V4h20v5"/><path d="M2 20v-5h20v5"/><path d="M2 14h20"/><path d="M6 9v5"/><path d="M18 9v5"/></svg></div>
+    <span class="nav-lbl">Bed Monitor</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('patients')" data-s="patients">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <span class="nav-lbl">Patients</span>
+    <span class="nav-badge">8</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('prebooking')" data-s="prebooking">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+    <span class="nav-lbl">Pre-Booking</span>
+    <span class="nav-badge" style="background:var(--gen)">New</span>
+  </div>
+  <div class="sb-section">Operations</div>
+  <div class="nav-item" onclick="showScreen('emergency')" data-s="emergency">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <span class="nav-lbl">Emergency</span>
+    <span class="nav-badge" style="background:var(--danger)">2</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('bloodby')" data-s="bloodby">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6 2 2 8 2 13a10 10 0 0 0 20 0C22 8 18 2 12 2z"/><path d="M12 6v8"/><path d="M8 10h8"/></svg></div>
+    <span class="nav-lbl">BloodBy</span>
+    <span class="nav-badge" style="background:#C0392B">Live</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('organdonation')" data-s="organdonation">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+    <span class="nav-lbl">Organ Donation</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('billing')" data-s="billing">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+    <span class="nav-lbl">Billing</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('govt')" data-s="govt">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <span class="nav-lbl">Govt Schemes</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('oncology')" data-s="oncology">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><circle cx="18" cy="8" r="4" fill="var(--cancer)"/></svg></div>
+    <span class="nav-lbl">Cancer Centre</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('reports')" data-s="reports">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+    <span class="nav-lbl">Reports</span>
+  </div>
+  <div class="sb-section">Info</div>
+  <div class="nav-item" onclick="showScreen('contact')" data-s="contact">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6 6l.87-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+    <span class="nav-lbl">Contact / Doctors</span>
+  </div>
+  <div class="nav-item" onclick="showScreen('auth')" data-s="auth">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <span class="nav-lbl">Login</span>
+  </div>
+  <div class="nav-item" onclick="toggleDark()">
+    <div class="nav-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+    <span class="nav-lbl" id="dark-lbl">Dark Mode</span>
+  </div>
+  <div class="sb-user">
+    <div class="sb-avatar">DR</div>
+    <div>
+      <div class="sb-uname" id="sb-user-name">Staff Member</div>
+      <div class="sb-urole" id="sb-user-role">Adichunchanagiri Hospital</div>
+    </div>
+  </div>
+</nav>
+<div id="sb-overlay" onclick="closeSidebar()"></div>
+
+<!-- ===== BOTTOM NAV (Mobile) ===== -->
+<nav id="bottomnav">
+  <button class="bn-item active" onclick="showScreen('dashboard')" data-bs="dashboard">
+    <div class="bn-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+    <span>Home</span>
+  </button>
+  <button class="bn-item" onclick="showScreen('aialloc')" data-bs="aialloc">
+    <div class="bn-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg></div>
+    <span>AI</span>
+  </button>
+  <button class="bn-item" onclick="showScreen('beds')" data-bs="beds">
+    <div class="bn-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9V4h20v5"/><path d="M2 20v-5h20v5"/><path d="M2 14h20"/></svg></div>
+    <span>Beds</span>
+  </button>
+  <button class="bn-item" onclick="showScreen('billing')" data-bs="billing">
+    <div class="bn-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+    <span>Bill</span>
+  </button>
+  <button class="bn-item" onclick="showScreen('emergency')" data-bs="emergency">
+    <div class="bn-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <span>SOS</span>
+  </button>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main id="main">
+
+<!-- ── DASHBOARD ── -->
+<section id="screen-dashboard" class="screen active">
+  <div class="page-hdr">
+    <div><h1 class="page-title" id="dash-greeting">Good Morning!</h1><p class="page-sub" id="dash-date">Adichunchanagiri Hospital · BG Nagar, Bellur Cross, Mandya</p></div>
+    <button class="btn btn-primary" onclick="showScreen('aialloc')">New AI Allocation</button>
+  </div>
+  <!-- Skeleton -->
+  <div id="dash-skel" class="skel-wrap">
+    <div class="skel-row"><div class="skel skel-card"></div><div class="skel skel-card"></div><div class="skel skel-card"></div><div class="skel skel-card"></div></div>
+    <div class="skel skel-block"></div><div class="skel skel-block"></div>
+  </div>
+  <!-- Content -->
+  <div id="dash-content" style="display:none">
+    <div class="stats-row">
+      <div class="stat-card glass blue">
+        <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9V4h20v5"/><path d="M2 20v-5h20v5"/><path d="M2 14h20"/></svg></div>
+        <div class="stat-lbl">Total Beds</div><div class="stat-val" data-target="300">0</div><div class="stat-sub">Across 6 wards</div>
+      </div>
+      <div class="stat-card glass green">
+        <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="stat-lbl">Available</div><div class="stat-val" data-target="64">0</div><div class="stat-sub">22.8% free</div>
+      </div>
+      <div class="stat-card glass warn">
+        <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div class="stat-lbl">Patients Today</div><div class="stat-val" data-target="216">0</div><div class="stat-sub">+18 admitted</div>
+      </div>
+      <div class="stat-card glass red">
+        <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div>
+        <div class="stat-lbl">Critical</div><div class="stat-val" data-target="9">0</div><div class="stat-sub">ICU monitoring</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card glass-card">
+        <div class="card-hdr"><div><div class="card-title">Ward Utilization</div><div class="card-sub">Live occupancy</div></div></div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-name icu-c">ICU</div><div class="bar-track"><div class="bar-fill" id="bf-icu" style="background:var(--icu)"></div></div><div class="bar-val" id="bv-icu">0%</div></div>
+          <div class="bar-row"><div class="bar-name gen-c">General</div><div class="bar-track"><div class="bar-fill" id="bf-gen" style="background:var(--gen)"></div></div><div class="bar-val" id="bv-gen">0%</div></div>
+          <div class="bar-row"><div class="bar-name prv-c">Private</div><div class="bar-track"><div class="bar-fill" id="bf-prv" style="background:var(--prv)"></div></div><div class="bar-val" id="bv-prv">0%</div></div>
+          <div class="bar-row"><div class="bar-name ped-c">Pediatric</div><div class="bar-track"><div class="bar-fill" id="bf-ped" style="background:var(--ped)"></div></div><div class="bar-val" id="bv-ped">0%</div></div>
+          <div class="bar-row"><div class="bar-name mat-c">Maternity</div><div class="bar-track"><div class="bar-fill" id="bf-mat" style="background:var(--mat)"></div></div><div class="bar-val" id="bv-mat">0%</div></div>
+        </div>
+      </div>
+      <div class="card glass-card">
+        <div class="card-hdr"><div><div class="card-title">Today's Admissions</div><div class="card-sub">Hourly inflow</div></div></div>
+        <canvas id="admChart" height="150"></canvas>
+      </div>
+    </div>
+    <div class="card glass-card">
+      <div class="card-hdr"><div class="card-title">Recent Activity</div><button class="btn btn-outline btn-sm" onclick="showScreen('patients')">View All →</button></div>
+      <!-- Mobile cards -->
+      <div class="mob-cards" id="dash-mob-cards"></div>
+      <!-- Desktop table -->
+      <div class="table-wrap desk-only">
+        <table><thead><tr><th>Patient</th><th>ID</th><th>Ward</th><th>Condition</th><th>Status</th><th>When</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Priya Sharma</strong></td><td>P-2041</td><td>ICU-3</td><td>Cardiac Arrest</td><td><span class="badge critical">Critical</span></td><td>2h ago</td><td><button class="btn btn-outline btn-sm" onclick="openPatModal('P-2041','Priya Sharma')">View</button></td></tr>
+          <tr><td><strong>Arjun Nair</strong></td><td>P-2039</td><td>Gen-7</td><td>Pneumonia</td><td><span class="badge moderate">Moderate</span></td><td>4h ago</td><td><button class="btn btn-outline btn-sm" onclick="openPatModal('P-2039','Arjun Nair')">View</button></td></tr>
+          <tr><td><strong>Meera Iyer</strong></td><td>P-2037</td><td>Prv-2</td><td>Post-Surgery</td><td><span class="badge stable">Stable</span></td><td>8h ago</td><td><button class="btn btn-outline btn-sm" onclick="openPatModal('P-2037','Meera Iyer')">View</button></td></tr>
+          <tr><td><strong>Rajesh Kumar</strong></td><td>P-2035</td><td>Gen-12</td><td>COVID-19</td><td><span class="badge moderate">Moderate</span></td><td>Yesterday</td><td><button class="btn btn-outline btn-sm" onclick="openPatModal('P-2035','Rajesh Kumar')">View</button></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AI ALLOCATION ── -->
+<section id="screen-aialloc" class="screen">
+  <div class="page-hdr"><div><h1 class="page-title">AI Ward Allocation</h1><p class="page-sub">ML severity scoring · Adichunchanagiri Hospital, Mandya</p></div></div>
+  <div class="grid-2">
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:18px">Patient Information</div>
+      <div class="form-grid">
+        <div class="form-grp"><label>Full Name</label><input id="ai-name" type="text" placeholder="Patient name"></div>
+        <div class="form-grp"><label>Age</label><input id="ai-age" type="number" placeholder="Age" min="0" max="120"></div>
+        <div class="form-grp"><label>Gender</label><select id="ai-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-grp"><label>Diagnosis</label><input id="ai-disease" type="text" placeholder="e.g. Cardiac Arrest"></div>
+        <div class="form-grp"><label>Severity</label><select id="ai-severity"><option>Low</option><option>Moderate</option><option selected>High</option><option>Critical</option></select></div>
+        <div class="form-grp"><label>Emergency?</label><select id="ai-emergency"><option>No</option><option selected>Yes</option></select></div>
+        <div class="form-grp"><label>Blood Pressure</label><input id="ai-bp" type="text" placeholder="e.g. 140/90 mmHg"></div>
+        <div class="form-grp"><label>SpO₂ %</label><input id="ai-spo2" type="number" placeholder="96" min="50" max="100"></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="runAI()">Run AI Analysis</button>
+        <button class="btn btn-outline" onclick="clearAI()">Clear</button>
+      </div>
+      <!-- AI Result -->
+      <div class="ai-result" id="ai-result">
+        <div class="ai-result-hdr">
+          <span style="font-size:32px">🤖</span>
+          <div><div style="font-size:10px;font-weight:700;letter-spacing:.8px;color:var(--txt3);text-transform:uppercase">AI Recommendation</div><div class="ai-ward-txt" id="ai-ward-txt">ICU Ward</div></div>
+          <div class="ai-conf-badge" id="ai-conf-badge">94%</div>
+        </div>
+        <!-- Severity Score Viz -->
+        <div class="sev-viz">
+          <div class="sev-labels"><span>Low</span><span>Moderate</span><span>High</span><span>Critical</span></div>
+          <div class="sev-track"><div class="sev-fill" id="sev-fill"></div></div>
+          <div class="sev-score-row">Severity Score: <strong id="sev-score">82/100</strong></div>
+        </div>
+        <div class="conf-bar"><div class="conf-fill" id="conf-fill" style="width:0%"></div></div>
+        <div class="ai-metrics">
+          <div class="ai-metric"><div class="ai-metric-lbl">WARD</div><div class="ai-metric-val" id="ai-wtype">ICU</div></div>
+          <div class="ai-metric"><div class="ai-metric-lbl">BED</div><div class="ai-metric-val" id="ai-bed" style="color:var(--p)">ICU-05</div></div>
+          <div class="ai-metric"><div class="ai-metric-lbl">PRIORITY</div><div class="ai-metric-val" id="ai-priority">HIGH</div></div>
+        </div>
+        <div class="ai-reason" id="ai-reason"></div>
+        <button class="btn btn-outline btn-sm" style="width:100%;margin-top:10px" onclick="explainAI()">Explain AI Decision</button>
+        <div class="ai-explain" id="ai-explain"></div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="confirmAlloc()">✅ Confirm &amp; Admit</button>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Alternatives','3 alternative wards available...')">Alternatives</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card glass-card" style="margin-bottom:18px">
+        <div class="card-title" style="margin-bottom:14px">Live Availability</div>
+        <div class="avail-list">
+          <div class="avail-item"><div class="avail-ward"><span class="avail-dot" style="background:var(--icu)"></span><strong>ICU</strong></div><div class="avail-info">3 free / 30<div class="avail-bar"><div style="width:90%;background:var(--icu)"></div></div></div></div>
+          <div class="avail-item"><div class="avail-ward"><span class="avail-dot" style="background:var(--gen)"></span><strong>General</strong></div><div class="avail-info">28 free / 100<div class="avail-bar"><div style="width:72%;background:var(--gen)"></div></div></div></div>
+          <div class="avail-item"><div class="avail-ward"><span class="avail-dot" style="background:var(--prv)"></span><strong>Private</strong></div><div class="avail-info">12 free / 50<div class="avail-bar"><div style="width:76%;background:var(--prv)"></div></div></div></div>
+          <div class="avail-item"><div class="avail-ward"><span class="avail-dot" style="background:var(--ped)"></span><strong>Pediatric</strong></div><div class="avail-info">14 free / 50<div class="avail-bar"><div style="width:72%;background:var(--ped)"></div></div></div></div>
+          <div class="avail-item"><div class="avail-ward"><span class="avail-dot" style="background:var(--mat)"></span><strong>Maternity</strong></div><div class="avail-info">7 free / 50<div class="avail-bar"><div style="width:86%;background:var(--mat)"></div></div></div></div>
+        </div>
+      </div>
+      <div class="card glass-card ai-engine-card">
+        <div class="ai-engine-title">🧠 AI Engine v3.0</div>
+        <div class="ai-info-row"><span>Algorithm</span><strong>Random Forest + Neural</strong></div>
+        <div class="ai-info-row"><span>Training Records</span><strong>80,000+ patients</strong></div>
+        <div class="ai-info-row"><span>Accuracy</span><strong>96.4%</strong></div>
+        <div class="ai-info-row"><span>Inputs</span><strong>Age, BP, SpO₂, Severity</strong></div>
+        <div class="ai-info-row"><span>Status</span><strong style="color:var(--gen)">● Online</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BED MONITOR ── -->
+<section id="screen-beds" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title">Live Bed Monitor</h1><p class="page-sub">300 beds · Real-time · Click any bed to view/allocate</p></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-outline btn-sm" onclick="refreshBeds()">Refresh</button><button class="btn btn-primary btn-sm" onclick="showToast('Export','Bed report downloading...')">Export</button></div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot free"></div>Free</div>
+    <div class="legend-item"><div class="legend-dot occupied"></div>Occupied</div>
+    <div class="legend-item"><div class="legend-dot reserved"></div>Reserved</div>
+    <div class="legend-item"><div class="legend-dot cleaning"></div>Cleaning</div>
+  </div>
+  <!-- Live stats bar -->
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+    <div class="stat-card glass" style="flex:1;min-width:100px;border-left:4px solid var(--gen)"><div class="stat-lbl">Free Beds</div><div class="stat-val" style="color:var(--gen)" id="beds-stat-free">—</div></div>
+    <div class="stat-card glass" style="flex:1;min-width:100px;border-left:4px solid var(--danger)"><div class="stat-lbl">Occupied</div><div class="stat-val" style="color:var(--danger)" id="beds-stat-occ">—</div></div>
+    <div class="stat-card glass" style="flex:1;min-width:100px;border-left:4px solid var(--warn)"><div class="stat-lbl">Reserved</div><div class="stat-val" style="color:var(--warn)" id="beds-stat-res">—</div></div>
+    <div class="stat-card glass" style="flex:1;min-width:120px;border-left:4px solid var(--primary)"><div class="stat-lbl">Total Beds</div><div class="stat-val" style="color:var(--primary)">300</div></div>
+  </div>
+  <div class="pred-banner"><span>AI Predicts:</span><strong id="bed-pred-txt">Loading forecast...</strong><button class="btn btn-outline btn-sm" onclick="updateBedPred()">Refresh</button></div>
+  <div class="card glass-card"><div class="ward-lbl icu-c">ICU — Critical Care (30 beds) <span style="font-size:11px;font-weight:400;color:var(--txt3)">— Click any bed to view patient or allocate</span></div><div class="bed-grid" id="beds-icu"></div></div>
+  <div class="card glass-card"><div class="ward-lbl gen-c">General Ward (100 beds)</div><div class="bed-grid" id="beds-gen"></div></div>
+  <div class="card glass-card"><div class="ward-lbl prv-c">Private Ward (50 beds)</div><div class="bed-grid" id="beds-prv"></div></div>
+  <div class="card glass-card"><div class="ward-lbl ped-c">Pediatric Ward (50 beds)</div><div class="bed-grid" id="beds-ped"></div></div>
+  <div class="card glass-card"><div class="ward-lbl mat-c">Maternity Ward (50 beds)</div><div class="bed-grid" id="beds-mat"></div></div>
+  <div class="card glass-card"><div class="ward-lbl" style="color:#E53E3E">Oncology Ward (20 beds)</div><div class="bed-grid" id="beds-onc"></div></div>
+</section>
+
+<!-- ── PATIENTS ── -->
+<section id="screen-patients" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title">Patient Management</h1><p class="page-sub">Admissions, discharge, digital records</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <input type="text" placeholder="🔍 Search patient..." style="width:170px" oninput="filterPatients(this.value)">
+      <button class="btn btn-primary" onclick="openModal('register-modal')">+ Register</button>
+    </div>
+  </div>
+  <div class="card glass-card">
+    <div class="tabs"><div class="tab active" onclick="setTab(this,'all')">All</div><div class="tab" onclick="setTab(this,'admitted')">Admitted</div><div class="tab" onclick="setTab(this,'discharged')">Discharged</div></div>
+    <!-- Mobile cards -->
+    <div class="mob-cards" id="pat-mob-cards"></div>
+    <!-- Desktop table -->
+    <div class="table-wrap desk-only">
+      <table id="patient-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Ward</th><th>Diagnosis</th><th>Priority</th><th>Status</th><th>Doctor</th><th>Actions</th></tr></thead>
+        <tbody id="patient-table-body">
+          <tr><td colspan="9" style="text-align:center;color:var(--txt3);padding:20px">Loading patients…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── EMERGENCY ── -->
+<section id="screen-emergency" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title">Emergency System</h1><p class="page-sub">Auto ICU allocation · Instant alerts · Real-time tracking</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="downloadEmergencyReport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Report PDF
+      </button>
+      <button class="btn btn-danger" onclick="triggerEmergency()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Code Blue
+      </button>
+    </div>
+  </div>
+
+  <!-- Active Alerts -->
+  <div id="emerg-alerts-container">
+    <div class="emerg-alert" id="ea1"><div class="emerg-icon">🚨</div><div style="flex:1"><div class="emerg-title">ACTIVE EMERGENCY — ICU Required</div><div class="emerg-sub">Ravi Kumar, 58 · Cardiac arrest · Auto-assigned ICU-7 · 3 min ago</div></div><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn btn-outline btn-sm" onclick="viewEmergPatient('E-001','Ravi Kumar')">View</button><button class="btn btn-danger btn-sm" onclick="ackAlert('ea1')">Ack</button></div></div>
+    <div class="emerg-alert" id="ea2"><div class="emerg-icon">⚠️</div><div style="flex:1"><div class="emerg-title">HIGH PRIORITY — Neurologist Needed</div><div class="emerg-sub">Lakshmi Rao, 72 · Stroke symptoms · Awaiting neurologist · 12 min ago</div></div><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn btn-outline btn-sm" onclick="viewEmergPatient('E-002','Lakshmi Rao')">View</button><button class="btn btn-danger btn-sm" onclick="ackAlert('ea2')">Ack</button></div></div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="stats-row" style="margin-bottom:18px">
+    <div class="stat-card glass red"><div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div><div class="stat-lbl">Active Cases</div><div class="stat-val" id="emerg-stat-active">2</div><div class="stat-sub">Right now</div></div>
+    <div class="stat-card glass warn"><div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat-lbl">Avg Response</div><div class="stat-val">4.2</div><div class="stat-sub">Minutes</div></div>
+    <div class="stat-card glass green"><div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stat-lbl">Resolved Today</div><div class="stat-val" id="emerg-stat-resolved">7</div><div class="stat-sub">Cases</div></div>
+    <div class="stat-card glass blue"><div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="stat-lbl">ICU Beds Free</div><div class="stat-val">3</div><div class="stat-sub">Available</div></div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Add Emergency Patient -->
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:16px;display:flex;align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        New Emergency Admission
+      </div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="form-grp"><label>Patient Name *</label><input id="emerg-name" type="text" placeholder="Full name"></div>
+        <div class="form-grp"><label>Age</label><input id="emerg-age" type="number" placeholder="Age" min="0" max="120"></div>
+        <div class="form-grp"><label>Gender</label><select id="emerg-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-grp"><label>Blood Group</label><select id="emerg-blood"><option value="Unknown">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select></div>
+        <div class="form-grp"><label>Emergency Type *</label><select id="emerg-type"><option>Cardiac Arrest</option><option>Stroke</option><option>Accident / Trauma</option><option>Respiratory Failure</option><option>Snake Bite</option><option>Road Accident</option><option>Poisoning</option><option>Seizure</option><option>Severe Burns</option><option>Other</option></select></div>
+        <div class="form-grp"><label>Severity *</label>
+          <select id="emerg-severity">
+            <option value="Critical" style="color:#C0392B">Critical — ICU Required</option>
+            <option value="High">High — Immediate Attention</option>
+            <option value="Medium">Medium — Urgent Care</option>
+            <option value="Low">Low — Standard Emergency</option>
+          </select>
+        </div>
+        <div class="form-grp"><label>Incoming From</label><select id="emerg-source"><option>Ambulance 108</option><option>Walk-in</option><option>Transferred Hospital</option><option>Air Ambulance</option><option>Police</option><option>Other</option></select></div>
+        <div class="form-grp"><label>Phone (Attendant)</label><input id="emerg-phone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+        <button class="btn btn-danger" style="padding:14px;font-size:14px;font-weight:700;letter-spacing:.5px" onclick="submitEmergency()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          ACTIVATE EMERGENCY PROTOCOL
+        </button>
+      </div>
+    </div>
+
+    <!-- Emergency Contacts -->
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:14px">Emergency Contacts</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="contact-row blue-bg"><span class="contact-ico">👨‍⚕️</span><div><div class="contact-name">Dr. Suresh Kumar (HOD Surgery)</div><div class="contact-sub">On duty · +91-98440-00001</div></div><button class="btn btn-primary btn-sm" onclick="showToast('Alert Sent','Dr. Suresh Kumar notified via SMS & app')">Alert</button></div>
+        <div class="contact-row red-bg"><span class="contact-ico">🏥</span><div><div class="contact-name">Adichunchanagiri ICU Team</div><div class="contact-sub">4 nurses · 2 doctors on call · Block A</div></div><button class="btn btn-danger btn-sm" onclick="showToast('Code Blue','Code Blue broadcast to all ICU staff!')">Code Blue</button></div>
+        <div class="contact-row warn-bg"><span class="contact-ico">🚑</span><div><div class="contact-name">108 Ambulance — Mandya</div><div class="contact-sub">Nearest unit ETA: 8 minutes</div></div><button class="btn btn-outline btn-sm" onclick="showToast('Tracking','Ambulance GPS tracking opened')">Track</button></div>
+        <div class="contact-row blue-bg"><span class="contact-ico">🩸</span><div><div class="contact-name">AH Blood Bank</div><div class="contact-sub">O+: 14 units · A+: 9 units · B+: 7 units</div></div><button class="btn btn-outline btn-sm" onclick="showScreen('bloodby')">Request</button></div>
+        <div class="contact-row" style="background:rgba(94,53,177,.06)"><span class="contact-ico">🫀</span><div><div class="contact-name">Organ Donation Coordinator</div><div class="contact-sub">NOTTO · 1800-11-4770 · 24×7</div></div><button class="btn btn-outline btn-sm" onclick="showScreen('organdonation')">Contact</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency Patient List -->
+  <div class="card glass-card" style="margin-top:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div class="card-title">Active Emergency Patients</div>
+      <button class="btn btn-outline btn-sm" onclick="downloadEmergencyReport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download All PDF
+      </button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="data-table" id="emerg-patient-table">
+        <thead><tr><th>Emerg ID</th><th>Patient</th><th>Age</th><th>Type</th><th>Severity</th><th>Bed</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="emerg-patient-tbody">
+          <tr><td><strong style="color:var(--danger)">E-001</strong></td><td><strong>Ravi Kumar</strong></td><td>58</td><td>Cardiac Arrest</td><td><span class="badge critical">Critical</span></td><td>ICU-07</td><td>3 min ago</td><td><span class="badge critical">Active</span></td><td class="act-cell"><button class="btn btn-outline btn-sm" onclick="viewEmergPatient('E-001','Ravi Kumar')">View</button><button class="btn btn-outline btn-sm" onclick="downloadEmergInvoice('E-001','Ravi Kumar','Cardiac Arrest','Critical')">PDF</button></td></tr>
+          <tr><td><strong style="color:var(--warn)">E-002</strong></td><td><strong>Lakshmi Rao</strong></td><td>72</td><td>Stroke</td><td><span class="badge critical">High</span></td><td>ICU-09</td><td>12 min ago</td><td><span class="badge critical">Active</span></td><td class="act-cell"><button class="btn btn-outline btn-sm" onclick="viewEmergPatient('E-002','Lakshmi Rao')">View</button><button class="btn btn-outline btn-sm" onclick="downloadEmergInvoice('E-002','Lakshmi Rao','Stroke','High')">PDF</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Mobile cards -->
+    <div id="emerg-mob-list" style="display:none">
+      <div class="mob-pat-card" style="border-left:3px solid var(--danger)">
+        <div class="mob-pat-row"><div style="flex:1"><div style="font-size:13.5px;font-weight:700;color:var(--txt)">Ravi Kumar</div><div style="font-size:12px;color:var(--danger);font-weight:600">E-001 · ICU-07</div></div><span class="badge critical">Critical</span></div>
+        <div style="font-size:12px;color:var(--txt2);margin:6px 0">Cardiac Arrest · Age 58 · 3 min ago</div>
+        <div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-outline btn-sm" onclick="viewEmergPatient('E-001','Ravi Kumar')">View</button><button class="btn btn-outline btn-sm" onclick="downloadEmergInvoice('E-001','Ravi Kumar','Cardiac Arrest','Critical')">PDF</button></div>
+      </div>
+      <div class="mob-pat-card" style="border-left:3px solid var(--warn)">
+        <div class="mob-pat-row"><div style="flex:1"><div style="font-size:13.5px;font-weight:700;color:var(--txt)">Lakshmi Rao</div><div style="font-size:12px;color:var(--warn);font-weight:600">E-002 · ICU-09</div></div><span class="badge moderate">High</span></div>
+        <div style="font-size:12px;color:var(--txt2);margin:6px 0">Stroke · Age 72 · 12 min ago</div>
+        <div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-outline btn-sm" onclick="viewEmergPatient('E-002','Lakshmi Rao')">View</button><button class="btn btn-outline btn-sm" onclick="downloadEmergInvoice('E-002','Lakshmi Rao','Stroke','High')">PDF</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BLOODBY ── -->
+<section id="screen-bloodby" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title" style="color:var(--danger)">BloodBy</h1><p class="page-sub">Blood Donation Network · Live Availability · Emergency Requests</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="downloadBloodReport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PDF
+      </button>
+      <button class="btn btn-danger" onclick="openModal('blood-request-modal')">Request Blood</button>
+    </div>
+  </div>
+
+  <!-- Blood Availability Stats -->
+  <div class="card glass-card" style="margin-bottom:18px">
+    <div class="card-title" style="margin-bottom:16px;color:var(--danger)">Live Blood Bank Inventory — Adichunchanagiri Hospital</div>
+    <div id="blood-inventory-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px">
+      <!-- Rendered by JS -->
+    </div>
+    <div style="margin-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="width:10px;height:10px;border-radius:50%;background:#00875A;display:inline-block"></span><span style="font-size:12px;color:var(--txt2)">Sufficient (10+)</span>
+      <span style="width:10px;height:10px;border-radius:50%;background:#E07B00;display:inline-block;margin-left:8px"></span><span style="font-size:12px;color:var(--txt2)">Low (3–9)</span>
+      <span style="width:10px;height:10px;border-radius:50%;background:#C0392B;display:inline-block;margin-left:8px"></span><span style="font-size:12px;color:var(--txt2)">Critical (&lt;3)</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Register Donor -->
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:16px;display:flex;align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Register as Blood Donor
+      </div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="form-grp"><label>Full Name *</label><input id="donor-name" type="text" placeholder="Your full name"></div>
+        <div class="form-grp"><label>Age *</label><input id="donor-age" type="number" placeholder="Age (18–65)" min="18" max="65"></div>
+        <div class="form-grp"><label>Phone *</label><input id="donor-phone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+        <div class="form-grp"><label>Blood Group *</label>
+          <select id="donor-blood">
+            <option value="">Select Blood Group</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option>
+            <option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="form-grp"><label>Location / Area</label><input id="donor-location" type="text" placeholder="Village / Town, Mandya"></div>
+        <div class="form-grp"><label>Last Donation Date</label><input id="donor-last-date" type="date"></div>
+        <div class="form-grp"><label>Available For Emergency?</label>
+          <select id="donor-emergency">
+            <option value="yes">Yes — Available 24×7</option>
+            <option value="daytime">Daytime Only (8AM–8PM)</option>
+            <option value="weekend">Weekends Only</option>
+          </select>
+        </div>
+        <button class="btn btn-danger" style="padding:14px;font-size:14px;font-weight:700" onclick="registerDonor()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Register as Donor
+        </button>
+      </div>
+    </div>
+
+    <!-- Donors / Requests -->
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:14px">Registered Donors & Recent Requests</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+        <button class="tab active" id="blood-tab-donors" onclick="setBloodTab(this,'blood-donors-list')">Donors</button>
+        <button class="tab" id="blood-tab-requests" onclick="setBloodTab(this,'blood-requests-list')">Requests</button>
+        <select onchange="filterDonorsByGroup(this.value)" style="font-size:12px;padding:5px 8px;margin-left:auto">
+          <option value="">All Blood Groups</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+      <div id="blood-donors-list">
+        <!-- Rendered by JS -->
+      </div>
+      <div id="blood-requests-list" style="display:none">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Donor Stats -->
+  <div class="card glass-card" style="margin-top:18px">
+    <div class="card-title" style="margin-bottom:16px">BloodBy Network Statistics</div>
+    <div class="stats-row">
+      <div class="stat-card glass red"><div class="stat-lbl">Total Donors</div><div class="stat-val" data-target="284">0</div><div class="stat-sub">Registered</div></div>
+      <div class="stat-card glass warn"><div class="stat-lbl">Donations This Month</div><div class="stat-val" data-target="47">0</div><div class="stat-sub">Units collected</div></div>
+      <div class="stat-card glass green"><div class="stat-lbl">Lives Saved</div><div class="stat-val" data-target="312">0</div><div class="stat-sub">Since 2020</div></div>
+      <div class="stat-card glass blue"><div class="stat-lbl">Emergency Fulfilled</div><div class="stat-val" data-target="98">0</div><div class="stat-sub">% success rate</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ORGAN DONATION ── -->
+<section id="screen-organdonation" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title" style="background:linear-gradient(135deg,#C0392B,#5E35B1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Organ Donation</h1><p class="page-sub">Give Life · NOTTO Registered · Pledge Today</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="downloadOrganReport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        My Pledge PDF
+      </button>
+      <button class="btn btn-primary" onclick="openModal('organ-pledge-modal')">Pledge Donation</button>
+    </div>
+  </div>
+
+  <!-- Hero banner -->
+  <div class="card glass-card" style="margin-bottom:18px;background:linear-gradient(135deg,rgba(94,53,177,.08),rgba(192,57,43,.06));border:1.5px solid rgba(94,53,177,.15)">
+    <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center">
+      <div>
+        <div style="font-size:22px;font-weight:800;color:var(--txt);margin-bottom:8px;line-height:1.2">One Donor Can<br>Save Up To 8 Lives</div>
+        <div style="font-size:13px;color:var(--txt2);line-height:1.7">Every 10 minutes, someone in India is added to the organ transplant waiting list. By pledging to donate your organs, you can give the gift of life to those desperately waiting.</div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <div style="background:rgba(0,135,90,.1);border:1px solid rgba(0,135,90,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--gen);font-weight:700">NOTTO Registered</div>
+          <div style="background:rgba(94,53,177,.1);border:1px solid rgba(94,53,177,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--purple);font-weight:700">Govt Approved</div>
+          <div style="background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--danger);font-weight:700">24×7 Support</div>
+        </div>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:56px;line-height:1">🫀</div>
+        <div style="font-size:11px;color:var(--txt3);margin-top:8px;font-weight:600">Gift of Life</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Organ Cards -->
+  <div style="margin-bottom:18px">
+    <div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:12px">Organs & Tissues You Can Donate</div>
+    <div id="organ-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Waiting List -->
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:14px;color:var(--danger)">Current Waiting List</div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="organ-waiting-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Process Steps -->
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:14px">Pledge Process — Step by Step</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--gen));display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:800;flex-shrink:0">1</div>
+          <div><div style="font-weight:700;font-size:13px;color:var(--txt)">Fill Pledge Form</div><div style="font-size:12px;color:var(--txt2)">Complete the online pledge with your personal & medical details</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--gen));display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:800;flex-shrink:0">2</div>
+          <div><div style="font-weight:700;font-size:13px;color:var(--txt)">NOTTO Registration</div><div style="font-size:12px;color:var(--txt2)">Your details are submitted to NOTTO (National Organ & Tissue Transplant Organisation)</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--gen));display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:800;flex-shrink:0">3</div>
+          <div><div style="font-weight:700;font-size:13px;color:var(--txt)">Donor Card Issued</div><div style="font-size:12px;color:var(--txt2)">Receive your official donor card & certificate. Notify family members</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--gen));display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:800;flex-shrink:0">4</div>
+          <div><div style="font-weight:700;font-size:13px;color:var(--txt)">Living Donation</div><div style="font-size:12px;color:var(--txt2)">Kidney, partial liver can be donated while living. Contact coordinator</div></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:8px;width:100%" onclick="openModal('organ-pledge-modal')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Pledge Now — Save Lives
+        </button>
+        <div style="text-align:center;font-size:11px;color:var(--txt3)">Helpline: <strong>1800-11-4770</strong> (Free · 24×7)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="card glass-card" style="margin-top:18px">
+    <div class="card-title" style="margin-bottom:14px">Organ Donation — National Statistics</div>
+    <div class="stats-row">
+      <div class="stat-card glass red"><div class="stat-lbl">Waiting in India</div><div class="stat-val" data-target="500000">0</div><div class="stat-sub">Patients</div></div>
+      <div class="stat-card glass warn"><div class="stat-lbl">Deceased Donors</div><div class="stat-val" data-target="1037">0</div><div class="stat-sub">In 2023</div></div>
+      <div class="stat-card glass green"><div class="stat-lbl">AH Pledges</div><div class="stat-val" data-target="142">0</div><div class="stat-sub">Registered</div></div>
+      <div class="stat-card glass blue"><div class="stat-lbl">Transplants Done</div><div class="stat-val" data-target="18378">0</div><div class="stat-sub">India 2023</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BILLING ── -->
+<section id="screen-billing" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title">Billing &amp; Payments</h1><p class="page-sub">UPI · Card · Net Banking · Insurance · AI Estimation</p></div>
+    <button class="btn btn-primary" onclick="openModal('newbill-modal')">+ New Bill</button>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card glass blue">
+      <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="stat-lbl">Today's Collection</div><div class="stat-val" data-target="148500">0</div><div class="stat-sub">₹ collected</div>
+    </div>
+    <div class="stat-card glass warn">
+      <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="stat-lbl">Pending Bills</div><div class="stat-val" data-target="12">0</div><div class="stat-sub">Awaiting</div>
+    </div>
+    <div class="stat-card glass green">
+      <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="stat-lbl">Paid This Month</div><div class="stat-val" data-target="342">0</div><div class="stat-sub">Settled</div>
+    </div>
+    <div class="stat-card glass purple">
+      <div class="stat-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="stat-lbl">Insurance Claims</div><div class="stat-val" data-target="48">0</div><div class="stat-sub">Processed</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:16px">Quick Payment</div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="form-grp"><label>Patient ID / Name</label><input id="pay-pid" type="text" placeholder="e.g. P-2041"></div>
+        <div class="form-grp"><label>Bill Amount (₹)</label><input id="pay-amt" type="number" placeholder="Amount" value="12500"></div>
+        <div class="form-grp"><label>Insurance Scheme</label>
+          <select id="pay-insure" onchange="checkInsurance()">
+            <option value="none">No Insurance</option>
+            <option value="ay">Ayushman Bharat (PMJAY)</option>
+            <option value="ak">Arogya Karnataka</option>
+            <option value="va">Vajpayee Arogyashree</option>
+            <option value="es">ESIC</option>
+            <option value="cg">CGHS</option>
+          </select>
+        </div>
+        <div id="ins-validated" class="ins-ok-box" style="display:none">
+          <span style="font-size:22px">✅</span>
+          <div><div id="ins-scheme-name" style="font-weight:700;color:var(--gen)">Validated</div><div id="ins-coverage" style="font-size:11px;color:var(--txt2)">Coverage: ₹5,00,000</div></div>
+        </div>
+        <div>
+          <div class="pay-method-label">Payment Method</div>
+          <div class="pay-grid">
+            <button class="pay-btn active" id="pm-upi" onclick="selectPay('upi')">📱 UPI</button>
+            <button class="pay-btn" id="pm-card" onclick="selectPay('card')">💳 Card</button>
+            <button class="pay-btn" id="pm-net" onclick="selectPay('net')">🌐 NetBank</button>
+            <button class="pay-btn" id="pm-cash" onclick="selectPay('cash')">💵 Cash</button>
+            <button class="pay-btn" id="pm-qr" onclick="selectPay('qr')">📷 QR Pay</button>
+            <button class="pay-btn paypal-btn" id="pm-paypal" onclick="selectPay('paypal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="#003087" style="vertical-align:middle;margin-right:3px"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.59 3.025-2.567 6.338-8.558 6.338H9.828l-1.116 7.083h2.7l.938-5.938h2.19c5.07 0 8.063-2.498 9.001-7.451a5.3 5.3 0 0 0-.32-.745z"/></svg>PayPal</button>
+          </div>
+        </div>
+        <div id="pay-panel-upi"><div class="form-grp"><label>UPI ID</label><input type="text" placeholder="yourname@upi"></div></div>
+        <div id="pay-panel-card" style="display:none">
+          <div class="form-grid">
+            <div class="form-grp"><label>Card Number</label><input type="text" placeholder="XXXX XXXX XXXX XXXX" maxlength="19"></div>
+            <div class="form-grp"><label>Expiry</label><input type="text" placeholder="MM/YY"></div>
+            <div class="form-grp"><label>CVV</label><input type="password" placeholder="•••" maxlength="3"></div>
+            <div class="form-grp"><label>Name on Card</label><input type="text" placeholder="Full name"></div>
+          </div>
+        </div>
+        <div id="pay-panel-qr" style="display:none">
+          <div style="text-align:center;padding:14px;background:var(--p3);border-radius:12px">
+            <svg width="120" height="120" viewBox="0 0 13 13" style="border:2px solid var(--p);border-radius:8px;padding:4px;background:#fff">
+              <rect x="1" y="1" width="4" height="4" fill="#0A84FF"/><rect x="2" y="2" width="2" height="2" fill="white"/>
+              <rect x="8" y="1" width="4" height="4" fill="#0A84FF"/><rect x="9" y="2" width="2" height="2" fill="white"/>
+              <rect x="1" y="8" width="4" height="4" fill="#0A84FF"/><rect x="2" y="9" width="2" height="2" fill="white"/>
+              <rect x="5" y="1" width="1" height="2" fill="#0A84FF"/><rect x="6" y="4" width="2" height="2" fill="#0A84FF"/>
+              <rect x="5" y="6" width="3" height="1" fill="#0A84FF"/><rect x="9" y="6" width="3" height="1" fill="#0A84FF"/>
+              <rect x="6" y="8" width="1" height="3" fill="#0A84FF"/><rect x="8" y="9" width="2" height="2" fill="#0A84FF"/>
+            </svg>
+            <div style="font-size:12px;margin-top:8px;color:var(--txt2)">UPI: ahcare@hospital · Scan to pay</div>
+          </div>
+        </div>
+        <div id="pay-panel-net" style="display:none"><div class="form-grp"><label>Bank</label><select><option>SBI</option><option>Canara Bank</option><option>HDFC</option><option>ICICI</option><option>Karnataka Bank</option><option>PNB</option></select></div></div>
+        <div id="pay-panel-paypal" style="display:none">
+          <div style="background:linear-gradient(135deg,#003087,#009cde);border-radius:12px;padding:18px;text-align:center;color:#fff">
+            <svg width="100" height="28" viewBox="0 0 124 33" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:10px">
+              <text x="0" y="26" font-family="Arial" font-weight="bold" font-size="26" fill="white">PayPal</text>
+            </svg>
+            <div style="font-size:12px;margin-bottom:14px;opacity:.9">Secure international payments via PayPal</div>
+            <div id="paypal-btn-container" style="max-width:280px;margin:0 auto"></div>
+            <div style="font-size:11px;margin-top:12px;opacity:.7">You will be redirected to PayPal to complete payment</div>
+          </div>
+          <div class="form-grp" style="margin-top:10px"><label>PayPal Email (Optional)</label><input type="email" id="paypal-email" placeholder="your@paypal.com"></div>
+        </div>
+        <button class="btn btn-outline" onclick="estimateBill()">AI Bill Estimation</button>
+        <div id="ai-bill-result" class="ai-bill-box" style="display:none">
+          <div class="ai-bill-title">🤖 AI Estimated Breakdown</div>
+          <div id="ai-bill-breakdown"></div>
+        </div>
+        <button class="btn btn-primary" style="padding:13px;font-size:14px" onclick="processPayment()">💳 Process Payment</button>
+      </div>
+    </div>
+    <div class="card glass-card">
+      <div class="card-hdr"><div class="card-title">Transaction History</div><select style="font-size:12px;padding:4px 8px"><option>Today</option><option>This Week</option><option>This Month</option></select></div>
+      <div class="txn-list" id="txn-list-container" style="display:flex;flex-direction:column;gap:10px">
+        <div style="text-align:center;padding:20px;color:var(--txt3);font-size:13px">Loading transactions…</div>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-top:12px" onclick="downloadAllInvoices()">Download All Invoices</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── GOVT SCHEMES ── -->
+<section id="screen-govt" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title">Government Health Schemes</h1><p class="page-sub">Mandya District · Karnataka · Central &amp; State</p></div>
+    <div class="mandya-badge">Mandya District</div>
+  </div>
+  <div class="tabs scheme-tabs">
+    <div class="tab active" onclick="setSchemeTab(this,'govt-central')">Central Govt</div>
+    <div class="tab" onclick="setSchemeTab(this,'govt-state')">State Govt</div>
+    <div class="tab" onclick="setSchemeTab(this,'govt-apply')">Apply Now</div>
+  </div>
+
+  <!-- Central -->
+  <div id="govt-central">
+    <div class="scheme-card glass-card">
+      <div class="scheme-hdr"><div class="scheme-ico">🇮🇳</div><div><div class="scheme-name">Ayushman Bharat — PMJAY</div><div class="scheme-ssub">Pradhan Mantri Jan Arogya Yojana</div></div><span class="scheme-badge central">Central</span></div>
+      <div class="scheme-grid">
+        <div class="scheme-sec"><div class="scheme-sec-title">✅ Eligibility</div><ul class="scheme-list"><li>BPL families in Mandya district</li><li>SECC 2011 listed households</li><li>Income below ₹2.5 lakh / year</li><li>Construction workers, domestic helpers</li><li>Tribal / SC / ST families</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📄 Documents Required</div><ul class="scheme-list"><li>Aadhaar Card (mandatory)</li><li>BPL / AAY Ration Card</li><li>Income Certificate (Tahsildar)</li><li>Caste Certificate (if applicable)</li><li>PMJAY HHD Number / e-Card</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">🎁 Benefits</div><ul class="scheme-list"><li>₹5,00,000 cover / family / year</li><li>1,929+ procedures covered</li><li>ICU, surgery, cancer, cardiac</li><li>Pre &amp; post hospitalization</li><li>Cashless at Adichunchanagiri</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📋 How to Apply</div><ol class="scheme-list"><li>Visit hospital Reception</li><li>Show Aadhaar + Ration card</li><li>CSC operator checks PMJAY portal</li><li>e-Card generated on-spot</li><li>Cashless treatment begins</li></ol></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-primary" onclick="downloadChecklist('Ayushman Bharat PMJAY')">Download Checklist</button><button class="btn btn-outline" onclick="applyScheme('Ayushman Bharat PMJAY')">Apply Now</button></div>
+    </div>
+    <div class="scheme-card glass-card">
+      <div class="scheme-hdr"><div class="scheme-ico">💻</div><div><div class="scheme-name">e-Sanjeevani</div><div class="scheme-ssub">National Telemedicine Service</div></div><span class="scheme-badge central">Central</span></div>
+      <div class="scheme-grid">
+        <div class="scheme-sec"><div class="scheme-sec-title">✅ Eligibility</div><ul class="scheme-list"><li>Any Indian citizen</li><li>Rural Mandya residents</li><li>Senior citizens (65+)</li><li>Differently-abled persons</li><li>Patients unable to travel</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📄 Documents Required</div><ul class="scheme-list"><li>Aadhaar or any Govt ID</li><li>Mobile number for OTP</li><li>Internet access (phone / PC)</li><li>Previous prescription (optional)</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">🎁 Benefits</div><ul class="scheme-list"><li>Free online doctor consultation</li><li>Digital prescription issued</li><li>No travel required</li><li>Available 9 AM – 6 PM</li><li>Follow-up consultations free</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📋 How to Apply</div><ol class="scheme-list"><li>Visit esanjeevaniopd.in</li><li>Register with mobile + Aadhaar</li><li>Choose specialist / general</li><li>Select date &amp; time slot</li><li>Join video / audio call</li></ol></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-primary" onclick="downloadChecklist('e-Sanjeevani')">Download Checklist</button><button class="btn btn-outline" onclick="applyScheme('e-Sanjeevani')">Register →</button></div>
+    </div>
+  </div>
+
+  <!-- State -->
+  <div id="govt-state" style="display:none">
+    <div class="scheme-card glass-card">
+      <div class="scheme-hdr"><div class="scheme-ico">🌟</div><div><div class="scheme-name">Arogya Karnataka</div><div class="scheme-ssub">Karnataka Universal Health Coverage</div></div><span class="scheme-badge state">State</span></div>
+      <div class="scheme-grid">
+        <div class="scheme-sec"><div class="scheme-sec-title">✅ Eligibility</div><ul class="scheme-list"><li>Karnataka resident (domicile cert)</li><li>Not covered under PMJAY / ESIC</li><li>BPL / APL families of Mandya</li><li>Income ≤ ₹5 lakh / year (APL)</li><li>Unorganized sector workers</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📄 Documents Required</div><ul class="scheme-list"><li>Karnataka domicile certificate</li><li>Aadhaar (all family members)</li><li>BPL / APL Ration Card</li><li>Income Certificate (Tahsildar)</li><li>Caste Certificate (if applicable)</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">🎁 Benefits</div><ul class="scheme-list"><li>BPL: ₹5,00,000 / year</li><li>APL: ₹1,50,000 / year</li><li>1,600+ treatments covered</li><li>Dialysis, cancer, cardiac</li><li>Adichunchanagiri empanelled</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📋 How to Apply</div><ol class="scheme-list"><li>Visit Mandya District Hospital</li><li>Fill Arogya Karnataka form</li><li>Submit documents at counter</li><li>Biometric enrollment done</li><li>Smart card issued in 7 days</li></ol></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-primary" onclick="downloadChecklist('Arogya Karnataka')">Download Checklist</button><button class="btn btn-outline" onclick="applyScheme('Arogya Karnataka')">Apply Now</button></div>
+    </div>
+    <div class="scheme-card glass-card">
+      <div class="scheme-hdr"><div class="scheme-ico">💛</div><div><div class="scheme-name">Vajpayee Arogyashree</div><div class="scheme-ssub">Karnataka Tertiary Care Scheme — APL Families</div></div><span class="scheme-badge state">State</span></div>
+      <div class="scheme-grid">
+        <div class="scheme-sec"><div class="scheme-sec-title">✅ Eligibility</div><ul class="scheme-list"><li>APL families in Karnataka</li><li>Annual income ₹1 – 5 lakh</li><li>Permanent Mandya residents</li><li>Not using other state schemes</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📄 Documents Required</div><ul class="scheme-list"><li>Aadhaar card</li><li>APL Ration card</li><li>Income certificate ≤ ₹5 lakh / yr</li><li>Mandya domicile certificate</li><li>Doctor referral letter</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">🎁 Benefits</div><ul class="scheme-list"><li>Coverage ₹1.5 lakh / year</li><li>Cardiac, neuro, ortho surgeries</li><li>Pre-auth within 24 hours</li><li>Adichunchanagiri empanelled</li></ul></div>
+        <div class="scheme-sec"><div class="scheme-sec-title">📋 How to Apply</div><ol class="scheme-list"><li>Get referral from Govt hospital</li><li>Apply at District Health Office</li><li>Submit income + Aadhaar docs</li><li>Pre-authorization issued online</li><li>Cashless treatment begins</li></ol></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn btn-primary" onclick="downloadChecklist('Vajpayee Arogyashree')">Download Checklist</button><button class="btn btn-outline" onclick="applyScheme('Vajpayee Arogyashree')">Apply Now</button></div>
+    </div>
+  </div>
+
+  <!-- Apply Now -->
+  <div id="govt-apply" style="display:none">
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:18px">📋 Online Application — Mandya District</div>
+      <div class="form-grid">
+        <div class="form-grp"><label>Full Name *</label><input id="app-name" type="text" placeholder="Patient full name"></div>
+        <div class="form-grp"><label>Aadhaar Number *</label><input id="app-aadhar" type="text" placeholder="XXXX XXXX XXXX" maxlength="14"></div>
+        <div class="form-grp"><label>Taluk</label><select><option>Mandya</option><option>Nagamangala</option><option>Maddur</option><option>Malavalli</option><option>Srirangapatna</option><option>Pandavapura</option><option>Krishnarajapete</option></select></div>
+        <div class="form-grp"><label>Annual Income (₹)</label><input id="app-income" type="number" placeholder="e.g. 85000"></div>
+        <div class="form-grp"><label>Scheme *</label><select id="app-scheme"><option>Ayushman Bharat PMJAY</option><option>e-Sanjeevani</option><option>Arogya Karnataka</option><option>Vajpayee Arogyashree</option></select></div>
+        <div class="form-grp"><label>Caste Category</label><select><option>General</option><option>OBC</option><option>SC</option><option>ST</option></select></div>
+        <div class="form-grp"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXXXXXXX"></div>
+        <div class="form-grp"><label>Ration Card Type</label><select><option>BPL (Yellow)</option><option>AAY (Pink)</option><option>APL (White)</option><option>None</option></select></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="submitGovtApp()">✅ Submit Application</button>
+        <button class="btn btn-outline" onclick="downloadChecklist('all')">📥 Full Documents Checklist</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REPORTS ── -->
+<section id="screen-reports" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title">Reports &amp; Analytics</h1><p class="page-sub">Utilization trends · AI predictions · Export</p></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-primary" onclick="showToast('PDF','Generating report PDF...')">📥 PDF</button><button class="btn btn-outline" onclick="showToast('CSV','Downloading CSV...')">📊 CSV</button></div>
+  </div>
+  <div class="grid-2">
+    <div class="card glass-card"><div class="card-hdr"><div class="card-title">Weekly Bed Utilization</div><select style="font-size:12px;padding:5px"><option>This Week</option><option>Last Week</option><option>Last Month</option></select></div><canvas id="weekChart" height="150"></canvas></div>
+    <div class="card glass-card"><div class="card-hdr"><div class="card-title">Admissions by Diagnosis</div></div><canvas id="diseaseChart" height="150"></canvas></div>
+  </div>
+  <div class="card glass-card">
+    <div class="card-hdr"><div class="card-title">🧠 AI Prediction — Tomorrow</div><div style="font-size:12px;font-weight:600;color:var(--p)">ML Powered</div></div>
+    <div class="pred-grid">
+      <div class="pred-card blue"><div class="pred-lbl">Expected Admissions</div><div class="pred-val">22–28</div></div>
+      <div class="pred-card red"><div class="pred-lbl">ICU Risk Cases</div><div class="pred-val">4–6</div></div>
+      <div class="pred-card warn"><div class="pred-lbl">Peak Hour</div><div class="pred-val">10–12am</div></div>
+      <div class="pred-card green"><div class="pred-lbl">Discharges</div><div class="pred-val">12–15</div></div>
+    </div>
+  </div>
+  <div class="card glass-card">
+    <div class="card-hdr"><div class="card-title">Daily Summary</div></div>
+    <div class="table-wrap"><table><thead><tr><th>Date</th><th>Admissions</th><th>Discharges</th><th>ICU</th><th>Avg Stay</th><th>Occupancy</th></tr></thead>
+    <tbody><tr><td>Today</td><td>18</td><td>12</td><td>9</td><td>—</td><td>77%</td></tr><tr><td>Yesterday</td><td>24</td><td>18</td><td>11</td><td>26h</td><td>79%</td></tr><tr><td>Wednesday</td><td>27</td><td>21</td><td>13</td><td>24h</td><td>82%</td></tr><tr><td>Tuesday</td><td>19</td><td>15</td><td>10</td><td>28h</td><td>74%</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="screen-contact" class="screen">
+  <div class="page-hdr"><div><h1 class="page-title">Contact &amp; Doctors &amp; Hospital Info</h1><p class="page-sub">Adichunchanagiri Hospital · Bellur Cross, BG Nagar, Nagamangala, Mandya</p></div></div>
+
+  <!-- Hospital info banner -->
+  <div class="hosp-banner glass-card">
+    <div class="hosp-ico">🏥</div>
+    <div class="hosp-info">
+      <div class="hosp-name">Adichunchanagiri Hospital &amp; Research Centre</div>
+      <div class="hosp-addr">Bellur Cross, BG Nagar, Nagamangala Taluk, Mandya District – 571448, Karnataka</div>
+      <div class="hosp-contacts">
+        <a href="tel:08234-287777" class="hc-btn">📞 08234-287777</a>
+        <a href="tel:18004250123" class="hc-btn">📞 1800-425-0123 (Toll Free)</a>
+        <a href="mailto:info@ahcare.in" class="hc-btn">📧 info@ahcare.in</a>
+        <a href="tel:08234-287800" class="hc-btn emerg">🚨 Emergency: 08234-287800</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="card glass-card">
+    <div class="card-title" style="margin-bottom:14px">📍 Location — Mandya, Karnataka</div>
+    <div class="map-wrap">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.9!2d76.77942!3d12.86278!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6c499ac91b75%3A0xded1c7e4d97f40e5!2sAdichunchanagiri%20Institute%20of%20Medical%20Sciences!5e0!3m2!1sen!2sin!4v1714500000001" width="100%" height="300" style="border:0;border-radius:12px" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <a href="https://maps.app.goo.gl/SFzDhcJvJX1iuxh68" target="_blank" target="_blank" class="btn btn-primary btn-sm" style="display:inline-flex;margin-top:10px">🗺 Open in Google Maps</a>
+    <div class="map-info-row">
+      <div class="map-info-item"><span>🚗</span><div><strong>By Road</strong><div class="map-info-sub">24 km from Mandya on NH-275</div></div></div>
+      <div class="map-info-item"><span>🚌</span><div><strong>By Bus</strong><div class="map-info-sub">Mandya → BG Nagar every 30 min</div></div></div>
+      <div class="map-info-item"><span>🚂</span><div><strong>Railway</strong><div class="map-info-sub">Maddur Station — 18 km</div></div></div>
+    </div>
+  </div>
+
+  <!-- Emergency contacts grid -->
+  <div class="card glass-card">
+    <div class="card-title" style="margin-bottom:14px">🚨 Emergency Contacts</div>
+    <div class="emerg-grid">
+      <a href="tel:108" class="emerg-card r"><div style="font-size:26px">🚑</div><div class="ec-title">108</div><div class="ec-sub">Free Ambulance</div></a>
+      <a href="tel:08234-287800" class="emerg-card o"><div style="font-size:26px">🏥</div><div class="ec-title">Emergency</div><div class="ec-sub">08234-287800</div></a>
+      <a href="tel:104" class="emerg-card b"><div style="font-size:26px">💊</div><div class="ec-title">104</div><div class="ec-sub">Health Helpline</div></a>
+      <a href="tel:100" class="emerg-card pu"><div style="font-size:26px">👮</div><div class="ec-title">100</div><div class="ec-sub">Police</div></a>
+      <a href="tel:101" class="emerg-card r"><div style="font-size:26px">🔥</div><div class="ec-title">101</div><div class="ec-sub">Fire Brigade</div></a>
+      <a href="tel:18004250123" class="emerg-card g"><div style="font-size:26px">📞</div><div class="ec-title">Toll Free</div><div class="ec-sub">1800-425-0123</div></a>
+    </div>
+  </div>
+
+  <!-- Doctor Directory -->
+  <div class="card glass-card">
+    <div class="card-hdr"><div class="card-title">👨‍⚕️ Doctor Directory</div><input type="text" placeholder="Search doctors..." style="width:170px" oninput="filterDoctors(this.value)"></div>
+    <div class="doc-tier-lbl">🎓 Dean / Chief Medical Officer</div><div class="doc-grid" id="doc-dean"></div>
+    <div class="doc-tier-lbl">👨‍⚕️ Senior Doctors</div><div class="doc-grid" id="doc-senior"></div>
+    <div class="doc-tier-lbl">🩺 Specialists</div><div class="doc-grid" id="doc-specialist"></div>
+    <div class="doc-tier-lbl">👩‍⚕️ Junior Doctors</div><div class="doc-grid" id="doc-junior"></div>
+    <div class="doc-tier-lbl">🎓 Interns</div><div class="doc-grid" id="doc-intern"></div>
+  </div>
+
+  <!-- Timings + Departments -->
+  <div class="grid-2">
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:14px">🕐 Timings</div>
+      <div class="timing-list">
+        <div class="timing-row"><span class="t-dept">OPD</span><span class="t-time">Mon–Sat · 8:00 AM – 7:00 PM</span></div>
+        <div class="timing-row"><span class="t-dept">Emergency</span><span class="t-time open">24 × 7</span></div>
+        <div class="timing-row"><span class="t-dept">ICU</span><span class="t-time open">24 × 7</span></div>
+        <div class="timing-row"><span class="t-dept">Pharmacy</span><span class="t-time">7:00 AM – 10:00 PM</span></div>
+        <div class="timing-row"><span class="t-dept">Laboratory</span><span class="t-time">6:30 AM – 8:00 PM</span></div>
+        <div class="timing-row"><span class="t-dept">Radiology</span><span class="t-time">8:00 AM – 8:00 PM</span></div>
+        <div class="timing-row"><span class="t-dept">Visiting Hours</span><span class="t-time">10–12 AM · 4–6 PM</span></div>
+      </div>
+    </div>
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:14px">🏢 Departments</div>
+            <div class="fac-grid">
+        <div class="fac-item dept-cancer">🎗 Oncology &amp; Cancer Care</div>
+        <div class="fac-item">🫀 Cardiology</div>
+        <div class="fac-item">🧠 Neurology</div>
+        <div class="fac-item">🦴 Orthopaedics</div>
+        <div class="fac-item">👶 Paediatrics</div>
+        <div class="fac-item">🤰 Obstetrics &amp; Gynaecology</div>
+        <div class="fac-item">👁 Ophthalmology</div>
+        <div class="fac-item">👂 ENT</div>
+        <div class="fac-item">🩺 Dermatology</div>
+        <div class="fac-item">🫘 Nephrology</div>
+        <div class="fac-item">🧬 Gastroenterology</div>
+        <div class="fac-item">🫁 Pulmonology &amp; Chest</div>
+        <div class="fac-item">💉 Diabetology &amp; Endocrinology</div>
+        <div class="fac-item">🧘 Psychiatry &amp; Mental Health</div>
+        <div class="fac-item">🦷 Dental &amp; Maxillofacial</div>
+        <div class="fac-item">🏃 Physiotherapy &amp; Rehab</div>
+        <div class="fac-item">🩻 Radiology &amp; Imaging</div>
+        <div class="fac-item">🧪 Pathology &amp; Lab</div>
+        <div class="fac-item">💊 Pharmacy</div>
+        <div class="fac-item">🩸 Blood Bank</div>
+        <div class="fac-item">🧬 Urology</div>
+        <div class="fac-item">🫀 Cardiothoracic Surgery</div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AUTH ── -->
+<section id="screen-auth" class="screen">
+  <div style="max-width:420px;margin:40px auto 0">
+    <div style="text-align:center;margin-bottom:26px">
+      <div style="font-size:52px;margin-bottom:10px">🏥</div>
+      <div style="font-family:var(--font2);font-size:26px;font-weight:700;color:var(--p)">AH Care</div>
+      <div style="font-size:13px;color:var(--txt2);margin-top:4px">Adichunchanagiri Hospital · Secure Access</div>
+    </div>
+    <div class="card glass-card">
+      <div class="tabs" style="margin-bottom:20px"><div class="tab active" onclick="setTab(this)">Admin</div><div class="tab" onclick="setTab(this)">Doctor</div><div class="tab" onclick="setTab(this)">Patient</div><div class="tab" onclick="setTab(this)">Govt</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="form-grp"><label>Email / Staff ID</label><input type="email" placeholder="Enter email" value="dr.suresh@ahcare.in"></div>
+        <div class="form-grp"><label>Password</label><input type="password" placeholder="••••••••" value="securepass"></div>
+        <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" checked id="rem-me"><label for="rem-me" style="font-size:13px;color:var(--txt2);text-transform:none;letter-spacing:0">Remember this device</label></div>
+        <button class="btn btn-primary" style="width:100%;padding:13px;font-size:15px" onclick="loginUser()">Login →</button>
+        <div style="text-align:center;font-size:11px;color:var(--txt3)">2-Factor Auth · Aadhaar Verified · SSL · HIPAA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRE-BOOKING ── -->
+<section id="screen-prebooking" class="screen">
+  <div class="page-hdr">
+    <div>
+      <h1 class="page-title">Pre-Booking — Checkup Queue</h1>
+      <p class="page-sub">Book health checkup slots · Smart priority queue · First come, first priority</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" onclick="loadPrebookingQueue()">Refresh Queue</button>
+      <button class="btn btn-primary" onclick="openModal('prebooking-modal')">Book New Slot</button>
+    </div>
+  </div>
+
+  <!-- Priority Info Banner -->
+  <div class="pb-priority-banner">
+    <div class="pb-pri-item urgent"><span class="pb-pri-dot"></span><strong>Urgent</strong><span>Seen first · Serious symptoms</span></div>
+    <div class="pb-pri-item high"><span class="pb-pri-dot"></span><strong>High Priority</strong><span>Elderly 60+ · Children under 10</span></div>
+    <div class="pb-pri-item normal"><span class="pb-pri-dot"></span><strong>Normal</strong><span>Standard adults</span></div>
+    <div class="pb-pri-item routine"><span class="pb-pri-dot"></span><strong>Routine</strong><span>Annual checkups</span></div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="stats-row" id="pb-stats-row">
+    <div class="stat-card glass blue"><span class="stat-ico">📅</span><div class="stat-lbl">Today's Bookings</div><div class="stat-val" id="pb-stat-total">5</div><div class="stat-sub">Pre-booked slots</div></div>
+    <div class="stat-card glass warn"><span class="stat-ico">⏳</span><div class="stat-lbl">Waiting</div><div class="stat-val" id="pb-stat-waiting">3</div><div class="stat-sub">In queue now</div></div>
+    <div class="stat-card glass green"><span class="stat-ico">✅</span><div class="stat-lbl">Completed</div><div class="stat-val" id="pb-stat-done">1</div><div class="stat-sub">Checked out</div></div>
+    <div class="stat-card glass red"><span class="stat-ico">🚨</span><div class="stat-lbl">Urgent Cases</div><div class="stat-val" id="pb-stat-urgent">1</div><div class="stat-sub">First priority</div></div>
+  </div>
+
+  <!-- Live Queue Table -->
+  <div class="card glass-card" style="margin-bottom:18px">
+    <div class="card-hdr">
+      <div><div class="card-title">Live Priority Queue — Today</div><div class="card-sub">Sorted by AI priority score · Updates every 30s</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="pb-dept-filter" onchange="filterPrebooking()" style="font-size:12px;padding:6px 10px">
+          <option value="">All Departments</option>
+          <option>General Medicine</option><option>Cardiology</option><option>Neurology</option>
+          <option>Orthopaedics</option><option>Paediatrics</option><option>Obstetrics &amp; Gynaecology</option>
+          <option>Dermatology</option><option>ENT</option><option>Ophthalmology</option>
+          <option>Oncology &amp; Cancer Care</option><option>Nephrology</option><option>Gastroenterology</option>
+          <option>Pulmonology &amp; Chest</option><option>Diabetology &amp; Endocrinology</option>
+          <option>Psychiatry &amp; Mental Health</option><option>Dental &amp; Maxillofacial</option>
+          <option>Urology</option><option>General Checkup / Master Health</option>
+        </select>
+      </div>
+    </div>
+    <!-- Mobile cards -->
+    <div class="mob-cards" id="pb-mob-cards"></div>
+    <!-- Desktop table -->
+    <div class="table-wrap desk-only">
+      <table id="pb-queue-table">
+        <thead><tr><th>Queue</th><th>Token</th><th>Patient</th><th>Age</th><th>Department</th><th>Symptoms</th><th>Slot</th><th>Priority</th><th>Score</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="pb-queue-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Department Slot View -->
+  <div class="card glass-card">
+    <div class="card-hdr"><div class="card-title">Department Slot Summary</div></div>
+    <div class="pb-dept-grid" id="pb-dept-grid"></div>
+  </div>
+</section>
+
+
+<!-- ── ONCOLOGY & CANCER CARE ── -->
+<section id="screen-oncology" class="screen">
+  <div class="page-hdr">
+    <div><h1 class="page-title">🎗 Oncology &amp; Cancer Care Centre</h1><p class="page-sub">Adichunchanagiri Hospital · Comprehensive Cancer Care · Ayushman Bharat Covered</p></div>
+    <button class="btn btn-primary" onclick="openModal('prebooking-modal')">Book Oncology Appointment</button>
+  </div>
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card glass" style="border-left:4px solid #E53E3E"><div class="stat-lbl">Oncology Beds</div><div class="stat-val" style="color:#E53E3E">20</div><div class="stat-sub">Dedicated ward (ONC)</div></div>
+    <div class="stat-card glass" style="border-left:4px solid var(--p)"><div class="stat-lbl">Free Beds Today</div><div class="stat-val" style="color:var(--p)">6</div><div class="stat-sub">Available now</div></div>
+    <div class="stat-card glass" style="border-left:4px solid #805AD5"><div class="stat-lbl">Chemo Sessions/Month</div><div class="stat-val" style="color:#805AD5">142</div><div class="stat-sub">Avg this quarter</div></div>
+    <div class="stat-card glass" style="border-left:4px solid var(--gen)"><div class="stat-lbl">Survival Rate</div><div class="stat-val" style="color:var(--gen)">78%</div><div class="stat-sub">5-year (all cancers)</div></div>
+  </div>
+  <div class="grid-2">
+    <!-- Services -->
+    <div class="card glass-card">
+      <div class="card-title" style="margin-bottom:18px;color:#E53E3E">🩺 Our Cancer Services</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="onco-service"><div class="onco-sico" style="background:rgba(229,62,62,.1);color:#E53E3E">🔬</div><div><div style="font-weight:700;font-size:13px">Surgical Oncology</div><div style="font-size:12px;color:var(--txt3)">Tumour resection, mastectomy, colostomy, biopsy</div></div></div>
+        <div class="onco-service"><div class="onco-sico" style="background:rgba(128,90,213,.1);color:#805AD5">💊</div><div><div style="font-weight:700;font-size:13px">Medical Oncology / Chemotherapy</div><div style="font-size:12px;color:var(--txt3)">Systemic chemo, targeted therapy, immunotherapy</div></div></div>
+        <div class="onco-service"><div class="onco-sico" style="background:rgba(237,137,54,.1);color:#ED8936">☢</div><div><div style="font-weight:700;font-size:13px">Radiation Therapy</div><div style="font-size:12px;color:var(--txt3)">Referral to empanelled radiation centres</div></div></div>
+        <div class="onco-service"><div class="onco-sico" style="background:rgba(0,135,90,.1);color:var(--p)">🧪</div><div><div style="font-weight:700;font-size:13px">Cancer Diagnostics</div><div style="font-size:12px;color:var(--txt3)">Tumour markers, biopsy, PET scan referral, histopathology</div></div></div>
+        <div class="onco-service"><div class="onco-sico" style="background:rgba(49,130,206,.1);color:#3182CE">🩸</div><div><div style="font-weight:700;font-size:13px">Haematology</div><div style="font-size:12px;color:var(--txt3)">Leukaemia, lymphoma, myeloma management</div></div></div>
+        <div class="onco-service"><div class="onco-sico" style="background:rgba(56,161,105,.1);color:#38A169">🧘</div><div><div style="font-weight:700;font-size:13px">Palliative &amp; Pain Care</div><div style="font-size:12px;color:var(--txt3)">Comfort care, pain management, counselling</div></div></div>
+      </div>
+    </div>
+    <!-- Team & Screening -->
+    <div>
+      <div class="card glass-card" style="margin-bottom:16px">
+        <div class="card-title" style="margin-bottom:14px">👨‍⚕️ Oncology Team</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="contact-row blue-bg"><div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(229,62,62,.2),rgba(229,62,62,.05));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#E53E3E;flex-shrink:0">KC</div><div><div style="font-weight:700;font-size:13px">Dr. Kiran C.</div><div style="font-size:11px;color:var(--txt3)">Surgical Oncologist · Ext 214</div></div><span class="doc-avail on"><span class="doc-avail-dot"></span>On Duty</span></div>
+          <div class="contact-row blue-bg"><div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(128,90,213,.2),rgba(128,90,213,.05));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#805AD5;flex-shrink:0">RP</div><div><div style="font-weight:700;font-size:13px">Dr. Radha P.</div><div style="font-size:11px;color:var(--txt3)">Medical Oncologist · Ext 215</div></div><span class="doc-avail on"><span class="doc-avail-dot"></span>On Duty</span></div>
+          <div class="contact-row blue-bg"><div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(0,135,90,.2),rgba(0,135,90,.05));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:var(--p);flex-shrink:0">NB</div><div><div style="font-weight:700;font-size:13px">Dr. Nisha B.</div><div style="font-size:11px;color:var(--txt3)">Haematologist · Ext 216</div></div><span class="doc-avail off"><span class="doc-avail-dot"></span>Off Duty</span></div>
+        </div>
+      </div>
+      <div class="card glass-card">
+        <div class="card-title" style="margin-bottom:14px;color:#E53E3E">🎗 Cancer Screening Camps</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+          <div style="background:rgba(229,62,62,.06);border-radius:10px;padding:12px;border-left:3px solid #E53E3E"><div style="font-weight:700">Breast Cancer Screening</div><div style="color:var(--txt3);font-size:12px;margin-top:3px">Every 2nd Saturday · 9AM–1PM · Block C, Floor 1</div></div>
+          <div style="background:rgba(128,90,213,.06);border-radius:10px;padding:12px;border-left:3px solid #805AD5"><div style="font-weight:700">Cervical Cancer (PAP Smear)</div><div style="color:var(--txt3);font-size:12px;margin-top:3px">Monthly · 1st Friday · OBG Dept</div></div>
+          <div style="background:rgba(237,137,54,.06);border-radius:10px;padding:12px;border-left:3px solid #ED8936"><div style="font-weight:700">Oral &amp; Throat Cancer</div><div style="color:var(--txt3);font-size:12px;margin-top:3px">Every Wednesday · 10AM–12PM · Dental Dept</div></div>
+          <div style="background:rgba(0,135,90,.06);border-radius:10px;padding:12px;border-left:3px solid var(--p)"><div style="font-weight:700">Colorectal Cancer</div><div style="color:var(--txt3);font-size:12px;margin-top:3px">Quarterly camp · Next: May 15 · Gastro Dept</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Insurance Coverage -->
+  <div class="card glass-card" style="border-top:3px solid #E53E3E">
+    <div class="card-hdr"><div class="card-title">🛡 Insurance &amp; Govt Scheme Coverage</div><span style="font-size:12px;color:var(--p);font-weight:600">All major schemes accepted</span></div>
+    <div class="stats-row" style="margin-bottom:0">
+      <div class="stat-card glass" style="background:linear-gradient(135deg,rgba(229,62,62,.07),rgba(229,62,62,.02))"><div class="stat-lbl">Ayushman Bharat PMJAY</div><div class="stat-val" style="font-size:15px;color:#E53E3E">✅ Covered</div><div class="stat-sub">₹5L/year · Chemo + Surgery</div></div>
+      <div class="stat-card glass" style="background:linear-gradient(135deg,rgba(0,135,90,.07),rgba(0,135,90,.02))"><div class="stat-lbl">Arogya Karnataka</div><div class="stat-val" style="font-size:15px;color:var(--p)">✅ Covered</div><div class="stat-sub">BPL ₹5L · APL ₹1.5L/year</div></div>
+      <div class="stat-card glass" style="background:linear-gradient(135deg,rgba(128,90,213,.07),rgba(128,90,213,.02))"><div class="stat-lbl">ESIC &amp; CGHS</div><div class="stat-val" style="font-size:15px;color:#805AD5">✅ Covered</div><div class="stat-sub">As per empanelment norms</div></div>
+      <div class="stat-card glass" style="background:linear-gradient(135deg,rgba(49,130,206,.07),rgba(49,130,206,.02))"><div class="stat-lbl">Private Insurance</div><div class="stat-val" style="font-size:15px;color:#3182CE">✅ Covered</div><div class="stat-sub">All TPA-empanelled policies</div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== PRE-BOOKING MODAL ===== -->
+<div id="prebooking-modal" class="modal-overlay" onclick="closeModal('prebooking-modal')">
+  <div class="modal-box modal-wide" onclick="event.stopPropagation()" style="max-height:90vh;overflow-y:auto">
+    <div class="modal-hdr">
+      <div class="modal-title">Book Health Checkup Slot</div>
+      <button class="modal-close" onclick="closeModal('prebooking-modal')">✕</button>
+    </div>
+    <div style="background:var(--p);color:#fff;border-radius:10px;padding:12px 16px;margin:12px 0;font-size:13px">
+      🌟 <strong>Pre-Booking Priority:</strong> Urgent cases and elderly patients (60+) get first appointment priority automatically.
+    </div>
+    <div class="form-grid" style="margin-top:10px">
+      <div class="form-grp"><label>Full Name *</label><input type="text" id="pb-name" placeholder="Patient full name"></div>
+      <div class="form-grp"><label>Age *</label><input type="number" id="pb-age" placeholder="Age" min="0" max="130" onchange="updatePriorityPreview()"></div>
+      <div class="form-grp"><label>Gender</label><select id="pb-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+      <div class="form-grp"><label>Phone *</label><input type="tel" id="pb-phone" placeholder="+91 XXXXXXXXXX"></div>
+      <div class="form-grp"><label>Aadhaar Number</label><input type="text" id="pb-aadhaar" placeholder="XXXX XXXX XXXX"></div>
+      <div class="form-grp"><label>Department *</label>
+        <select id="pb-dept">
+          <option value="">Select Department</option>
+          <option>General Medicine</option>
+          <option>Cardiology</option>
+          <option>Neurology</option>
+          <option>Orthopaedics</option>
+          <option>Paediatrics</option>
+          <option>Obstetrics &amp; Gynaecology</option>
+          <option>Dermatology</option>
+          <option>ENT</option>
+          <option>Ophthalmology</option>
+          <option>Oncology &amp; Cancer Care</option>
+          <option>Nephrology</option>
+          <option>Gastroenterology</option>
+          <option>Pulmonology &amp; Chest</option>
+          <option>Diabetology &amp; Endocrinology</option>
+          <option>Psychiatry &amp; Mental Health</option>
+          <option>Dental &amp; Maxillofacial</option>
+          <option>Physiotherapy &amp; Rehab</option>
+          <option>Urology</option>
+          <option>General Checkup / Master Health</option>
+        </select>
+      </div>
+      <div class="form-grp"><label>Preferred Date *</label><input type="date" id="pb-date" min=""></div>
+      <div class="form-grp"><label>Preferred Time Slot *</label>
+        <select id="pb-slot">
+          <option value="">Select Slot</option>
+          <option value="08:00-10:00">08:00 AM – 10:00 AM</option>
+          <option value="10:00-12:00">10:00 AM – 12:00 PM</option>
+          <option value="12:00-14:00">12:00 PM – 02:00 PM</option>
+          <option value="14:00-16:00">02:00 PM – 04:00 PM</option>
+          <option value="16:00-18:00">04:00 PM – 06:00 PM</option>
+        </select>
+      </div>
+      <div class="form-grp"><label>Priority Level</label>
+        <select id="pb-priority" onchange="updatePriorityPreview()">
+          <option value="Routine">Routine (Annual Checkup)</option>
+          <option value="Normal" selected>Normal</option>
+          <option value="High">High (Recurring issue)</option>
+          <option value="Urgent">Urgent (Serious symptoms)</option>
+        </select>
+      </div>
+      <div class="form-grp"><label>Govt Scheme</label>
+        <select id="pb-scheme">
+          <option value="">None</option>
+          <option>Ayushman Bharat PMJAY</option>
+          <option>Arogya Karnataka</option>
+          <option>Vajpayee Arogyashree</option>
+          <option>e-Sanjeevani</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grp" style="margin-top:12px"><label>Symptoms / Reason for Visit *</label><textarea id="pb-symptoms" placeholder="Describe your symptoms briefly (e.g., headache for 3 days, knee pain, general health checkup...)" rows="3" style="resize:vertical" oninput="updatePriorityPreview()"></textarea></div>
+    <div class="form-grp" style="margin-top:10px"><label>Address</label><input type="text" id="pb-address" placeholder="Village / Town, Taluk, District"></div>
+    <!-- Live Priority Preview -->
+    <div id="pb-priority-preview" style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-top:14px;display:none">
+      <div style="font-size:12px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Estimated Priority</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div id="pb-prev-badge" style="padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;background:var(--gen);color:#fff">Normal</div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">Priority Score</div>
+          <div style="background:var(--border);border-radius:20px;height:8px;overflow:hidden"><div id="pb-prev-bar" style="height:100%;width:0%;background:var(--p);transition:width .4s"></div></div>
+        </div>
+        <div id="pb-prev-score" style="font-size:18px;font-weight:700;color:var(--p)">0</div>
+      </div>
+      <div id="pb-prev-note" style="font-size:12px;color:var(--txt2);margin-top:8px"></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('prebooking-modal')">Cancel</button>
+      <button class="btn btn-primary" id="pb-submit-btn" onclick="submitPrebooking()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pre-Booking Confirmation Modal -->
+<div id="pb-confirm-modal" class="modal-overlay" onclick="closeModal('pb-confirm-modal')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title">Booking Confirmed ✅</div><button class="modal-close" onclick="closeModal('pb-confirm-modal')">✕</button></div>
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:52px;margin-bottom:12px"></div>
+      <div style="font-size:17px;font-weight:700;color:var(--p);margin-bottom:6px" id="pb-conf-id">Booking ID</div>
+      <div style="font-size:14px;color:var(--txt);margin-bottom:4px" id="pb-conf-name">Patient Name</div>
+      <div style="font-size:13px;color:var(--txt2);margin-bottom:12px" id="pb-conf-details">Details</div>
+      <div style="background:var(--bg);border-radius:10px;padding:14px;margin-top:10px;text-align:left">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:var(--txt3);font-size:12px">TOKEN</span><strong id="pb-conf-token">TKN-BK-5006</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:var(--txt3);font-size:12px">PRIORITY</span><strong id="pb-conf-priority">Normal</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--txt3);font-size:12px">QUEUE POSITION</span><strong id="pb-conf-queue">—</strong></div>
+      </div>
+      <div style="font-size:12px;color:var(--txt3);margin-top:14px">Please arrive 15 minutes before your slot · Adichunchanagiri Hospital, Mandya</div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="closeModal('pb-confirm-modal');loadPrebookingQueue()">Done</button>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- QR Modal -->
+<div id="qr-modal" class="modal-overlay" onclick="closeModal('qr-modal')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title">QR Check-in</div><button class="modal-close" onclick="closeModal('qr-modal')">✕</button></div>
+    <div style="text-align:center;padding:20px 0">
+      <div style="display:inline-block;padding:16px;border:2px solid var(--p);border-radius:12px;background:#fff;margin-bottom:14px">
+        <svg width="130" height="130" viewBox="0 0 13 13">
+          <rect x="1" y="1" width="4" height="4" fill="#0A84FF"/><rect x="2" y="2" width="2" height="2" fill="white"/>
+          <rect x="8" y="1" width="4" height="4" fill="#0A84FF"/><rect x="9" y="2" width="2" height="2" fill="white"/>
+          <rect x="1" y="8" width="4" height="4" fill="#0A84FF"/><rect x="2" y="9" width="2" height="2" fill="white"/>
+          <rect x="6" y="1" width="1" height="1" fill="#0A84FF"/><rect x="5" y="3" width="1" height="1" fill="#0A84FF"/>
+          <rect x="6" y="5" width="1" height="1" fill="#0A84FF"/><rect x="5" y="6" width="2" height="1" fill="#0A84FF"/>
+          <rect x="8" y="6" width="1" height="1" fill="#0A84FF"/><rect x="10" y="6" width="1" height="1" fill="#0A84FF"/>
+          <rect x="12" y="6" width="1" height="1" fill="#0A84FF"/><rect x="6" y="8" width="1" height="2" fill="#0A84FF"/>
+          <rect x="8" y="8" width="2" height="1" fill="#0A84FF"/><rect x="11" y="8" width="2" height="2" fill="#0A84FF"/>
+        </svg>
+      </div>
+      <div style="font-size:14px;font-weight:600;color:var(--txt)" id="qr-patient-id">Patient: P-2041</div>
+      <div style="font-size:12px;color:var(--txt2);margin-top:4px">Scan at ward entrance · AH Care, Mandya</div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="closeModal('qr-modal')">Close</button>
+  </div>
+</div>
+
+<!-- Patient Detail Modal -->
+<div id="patient-modal" class="modal-overlay" onclick="closeModal('patient-modal')">
+  <div class="modal-box modal-wide" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title" id="modal-pat-name">Patient Detail</div><button class="modal-close" onclick="closeModal('patient-modal')">✕</button></div>
+    <div class="patient-grid">
+      <div><div class="det-lbl">Patient ID</div><div class="det-val" id="modal-pat-id">P-2041</div></div>
+      <div><div class="det-lbl">Age / Gender</div><div class="det-val">52 · Female</div></div>
+      <div><div class="det-lbl">Ward / Bed</div><div class="det-val">ICU-03</div></div>
+      <div><div class="det-lbl">Diagnosis</div><div class="det-val">Cardiac Arrest</div></div>
+      <div><div class="det-lbl">Attending Doctor</div><div class="det-val">Dr. Suresh Kumar</div></div>
+      <div><div class="det-lbl">Admitted</div><div class="det-val">03 Apr 2026, 07:30 AM</div></div>
+    </div>
+    <div style="margin-top:16px"><div class="det-lbl" style="margin-bottom:8px">Medical History</div>
+      <div style="font-size:13px;color:var(--txt2);line-height:1.7;background:var(--bg);padding:14px;border-radius:8px">Hypertension (since 2018), Type 2 Diabetes. Previous cardiac event in 2023. Currently on Metoprolol, Aspirin, Atorvastatin. Allergic to Penicillin. Emergency admission — underwent angioplasty at 08:15 AM today.</div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="showToast('Notes','Voice notes recorder opened')">Add Voice Note</button>
+      <button class="btn btn-outline btn-sm" onclick="showToast('Download','Medical history PDF downloading...')">Download History</button>
+      <button class="btn btn-success btn-sm" onclick="closeModal('patient-modal');showToast('Discharge','Discharge process started...')">Discharge</button>
+    </div>
+  </div>
+</div>
+
+<!-- Register Patient Modal -->
+<div id="register-modal" class="modal-overlay" onclick="closeModal('register-modal')">
+  <div class="modal-box modal-wide" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title">Register New Patient</div><button class="modal-close" onclick="closeModal('register-modal')">✕</button></div>
+    <div class="form-grid" style="margin-top:16px">
+      <div class="form-grp"><label>Full Name *</label><input type="text" id="reg-name" placeholder="Patient full name"></div>
+      <div class="form-grp"><label>Age *</label><input type="number" id="reg-age" placeholder="Age" min="0" max="130"></div>
+      <div class="form-grp"><label>Gender</label><select id="reg-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+      <div class="form-grp"><label>Phone</label><input type="tel" id="reg-phone" placeholder="+91 XXXXXXXXXX"></div>
+      <div class="form-grp"><label>Aadhaar Number</label><input type="text" id="reg-aadhaar" placeholder="XXXX XXXX XXXX"></div>
+      <div class="form-grp"><label>Blood Group</label><select id="reg-blood"><option value="Unknown">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select></div>
+      <div class="form-grp"><label>Ward Type</label><select id="reg-ward"><option value="">OPD / TBD</option><option>ICU</option><option>General</option><option>Private</option><option>Pediatric</option><option>Maternity</option></select></div>
+      <div class="form-grp"><label>Diagnosis</label><input type="text" id="reg-diagnosis" placeholder="e.g. Fever, Fracture"></div>
+      <div class="form-grp"><label>Severity</label><select id="reg-severity"><option value="">Select</option><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+      <div class="form-grp"><label>Attending Doctor</label><select id="reg-doctor"><option value="">Select Doctor</option><option>Dr. Suresh Kumar</option><option>Dr. Manjunath B.</option><option>Dr. Kavitha Reddy</option><option>Dr. Anand Murthy</option><option>Dr. Priya Nair</option><option>Dr. Gopal D.</option><option>Dr. Rekha M.</option><option>Dr. Ravi Shankar</option></select></div>
+      <div class="form-grp"><label>Govt Scheme</label><select id="reg-scheme"><option value="">None</option><option>Ayushman Bharat PMJAY</option><option>Arogya Karnataka</option><option>Vajpayee Arogyashree</option><option>ESIC</option></select></div>
+      <div class="form-grp"><label>Emergency?</label><select id="reg-emergency"><option value="false">No</option><option value="true">Yes</option></select></div>
+    </div>
+    <div class="form-grp" style="margin-top:14px"><label>Address (Village / Town, Taluk, Mandya District)</label><textarea id="reg-address" placeholder="Full address" rows="2" style="resize:vertical"></textarea></div>
+    <div class="form-grp" style="margin-top:10px"><label>Medical History / Notes</label><textarea id="reg-history" placeholder="Previous conditions, allergies, medications..." rows="2" style="resize:vertical"></textarea></div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('register-modal')">Cancel</button>
+      <button class="btn btn-primary" id="reg-submit-btn" onclick="registerPatient()">Register &amp; Generate ID</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Bill Modal -->
+<div id="newbill-modal" class="modal-overlay" onclick="closeModal('newbill-modal')">
+  <div class="modal-box modal-wide" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title">Create New Invoice</div><button class="modal-close" onclick="closeModal('newbill-modal')">&#x2715;</button></div>
+    <div class="form-grid" style="margin-top:16px">
+      <div class="form-grp"><label>Patient ID *</label><input type="text" id="nb-patient-id" placeholder="e.g. P-2041"></div>
+      <div class="form-grp"><label>Patient Name</label><input type="text" id="nb-patient-name" placeholder="Full name"></div>
+      <div class="form-grp"><label>Admission Type</label><select id="nb-admission-type"><option>OPD</option><option>IPD</option><option>Emergency</option><option>Day Care</option></select></div>
+      <div class="form-grp"><label>Doctor Fee (&#8377;)</label><input type="number" id="nb-doctor-fee" placeholder="1500" min="0"></div>
+      <div class="form-grp"><label>Ward Charges (&#8377;)</label><input type="number" id="nb-ward-charges" placeholder="3600" min="0"></div>
+      <div class="form-grp"><label>Medicine Charges (&#8377;)</label><input type="number" id="nb-medicine-charges" placeholder="4200" min="0"></div>
+      <div class="form-grp"><label>Lab / Tests (&#8377;)</label><input type="number" id="nb-lab-tests" placeholder="2100" min="0"></div>
+      <div class="form-grp"><label>Surgery / Procedure (&#8377;)</label><input type="number" id="nb-surgery-charges" placeholder="0" min="0"></div>
+      <div class="form-grp"><label>Insurance Deduction (&#8377;)</label><input type="number" id="nb-insurance-deduction" placeholder="0" min="0"></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal('newbill-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createBill()">Generate Invoice &amp; Download</button>
+    </div>
+  </div>
+</div>
+
+<!-- Govt Application Success Modal -->
+<div id="govt-modal" class="modal-overlay" onclick="closeModal('govt-modal')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title">Application Submitted ✅</div><button class="modal-close" onclick="closeModal('govt-modal')">✕</button></div>
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:48px;margin-bottom:14px">📋</div>
+      <div style="font-size:15px;font-weight:600;color:var(--txt);margin-bottom:10px" id="govt-modal-msg">Application submitted!</div>
+      <div style="font-size:13px;color:var(--txt2);line-height:1.6">Reference No: <strong id="govt-ref-no"></strong><br>Visit the hospital reception with your documents within 7 days.</div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="closeModal('govt-modal')">OK, Got it</button>
+  </div>
+</div>
+
+<!-- ===== CHATBOT ===== -->
+<button id="chatbot-btn" onclick="toggleChat()" aria-label="Open AI Assistant">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+
+<div id="chatbot-panel" role="dialog" aria-label="AH Care AI Assistant">
+  <div class="chat-hdr">
+    <div class="chat-av">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>
+    </div>
+    <div><div class="chat-title">AH Care AI Assistant</div><div class="chat-sub" id="chat-status">Online · Kannada &amp; English</div></div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="lang-kn" onclick="setLang('kn')">&#3221;&#3240;&#3277;&#3240;&#3233;</button>
+    </div>
+  </div>
+  <div id="chat-messages" role="log" aria-live="polite">
+    <div class="msg bot">&#3240;&#3245;&#3256;&#3277;&#3221;&#3246;&#3248;! Hello!<br>I'm your AI assistant for <strong>Adichunchanagiri Hospital</strong>, Mandya.<br><br>Ask me about beds, billing, govt schemes, admission, emergency or doctors!</div>
+  </div>
+  <div class="chat-input-row">
+    <button class="mic-btn" id="mic-btn" onclick="toggleMic()" title="Voice input" aria-label="Voice input">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </button>
+    <input type="text" id="chat-input" placeholder="Ask anything..." onkeypress="handleChatKey(event)" autocomplete="off">
+    <button class="spk-btn" id="spk-btn" onclick="speakLast()" title="Read aloud" aria-label="Read aloud">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    </button>
+    <button class="chat-send" onclick="sendChat()" aria-label="Send">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="notif-toast" role="status" aria-live="assertive" style="
+  position:fixed;top:calc(var(--tbh)+12px);right:16px;z-index:9999;
+  background:rgba(255,255,255,.97);border:1.5px solid rgba(0,135,90,.15);border-left:4px solid var(--gen);
+  border-radius:14px;padding:13px 16px;min-width:260px;max-width:340px;
+  box-shadow:0 12px 48px rgba(0,135,90,.20);
+  display:none;align-items:flex-start;gap:10px;
+">
+  <div style="width:32px;height:32px;border-radius:9px;background:var(--p3);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--p)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div style="flex:1">
+    <div style="font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px" id="toast-title"></div>
+    <div style="font-size:12px;color:var(--txt3);line-height:1.4" id="toast-msg"></div>
+  </div>
+  <button onclick="this.parentElement.style.display='none'" style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--txt3);flex-shrink:0;line-height:1">&#x2715;</button>
+</div>
+<style>
+#notif-toast.show{display:flex!important;animation:slideIn .25s ease}
+</style>
+
+<!-- Emergency View Modal -->
+<div id="emerg-view-modal" class="modal-overlay" onclick="closeModal('emerg-view-modal')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title">Emergency Patient Details</div><button class="modal-close" onclick="closeModal('emerg-view-modal')">✕</button></div>
+    <div id="emerg-view-content" style="padding:16px 0"></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('emerg-view-modal')">Close</button>
+      <button class="btn btn-danger" style="flex:1" id="emerg-pdf-btn" onclick="">Download Invoice PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Blood Request Modal -->
+<div id="blood-request-modal" class="modal-overlay" onclick="closeModal('blood-request-modal')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr"><div class="modal-title" style="color:var(--danger)">Request Blood</div><button class="modal-close" onclick="closeModal('blood-request-modal')">✕</button></div>
+    <div style="display:flex;flex-direction:column;gap:13px;margin-top:10px">
+      <div class="form-grp"><label>Patient Name *</label><input id="breq-name" type="text" placeholder="Patient name"></div>
+      <div class="form-grp"><label>Patient ID</label><input id="breq-pid" type="text" placeholder="e.g. P-2041"></div>
+      <div class="form-grp"><label>Blood Group Required *</label>
+        <select id="breq-blood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select>
+      </div>
+      <div class="form-grp"><label>Units Required *</label><input id="breq-units" type="number" min="1" max="10" placeholder="Number of units" value="2"></div>
+      <div class="form-grp"><label>Urgency</label>
+        <select id="breq-urgency"><option>Immediate (within 1 hour)</option><option>Urgent (within 4 hours)</option><option>Scheduled (within 24 hours)</option></select>
+      </div>
+      <div class="form-grp"><label>Requesting Doctor</label><input id="breq-doctor" type="text" placeholder="Doctor name"></div>
+      <div class="form-grp"><label>Contact Phone *</label><input id="breq-phone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('blood-request-modal')">Cancel</button>
+      <button class="btn btn-danger" style="flex:1" onclick="submitBloodRequest()">Submit Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- Organ Pledge Modal -->
+<div id="organ-pledge-modal" class="modal-overlay" onclick="closeModal('organ-pledge-modal')">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width:500px">
+    <div class="modal-hdr"><div class="modal-title" style="color:var(--purple)">Organ Donation Pledge</div><button class="modal-close" onclick="closeModal('organ-pledge-modal')">✕</button></div>
+    <div style="display:flex;flex-direction:column;gap:13px;margin-top:10px">
+      <div class="form-grp"><label>Full Name *</label><input id="org-name" type="text" placeholder="Your full legal name"></div>
+      <div class="form-grp"><label>Age *</label><input id="org-age" type="number" placeholder="Age" min="18"></div>
+      <div class="form-grp"><label>Phone *</label><input id="org-phone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+      <div class="form-grp"><label>Aadhaar Number</label><input id="org-aadhaar" type="text" placeholder="XXXX XXXX XXXX" maxlength="14"></div>
+      <div class="form-grp"><label>Blood Group</label>
+        <select id="org-blood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select>
+      </div>
+      <div class="form-grp"><label>Organs to Donate</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-heart" checked> Heart</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-liver" checked> Liver</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-kidney" checked> Kidneys</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-lungs" checked> Lungs</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-cornea" checked> Corneas</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-skin"> Skin</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-bone"> Bone</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--txt);font-weight:400"><input type="checkbox" id="org-pancreas" checked> Pancreas</label>
+        </div>
+      </div>
+      <div class="form-grp"><label>Emergency Contact Name *</label><input id="org-contact-name" type="text" placeholder="Next of kin name"></div>
+      <div class="form-grp"><label>Emergency Contact Phone *</label><input id="org-contact-phone" type="tel" placeholder="+91 XXXXX XXXXX"></div>
+      <div style="background:rgba(94,53,177,.06);border:1px solid rgba(94,53,177,.15);border-radius:10px;padding:12px;font-size:12px;color:var(--txt2);line-height:1.6">
+        By pledging, I authorise Adichunchanagiri Hospital and NOTTO to use my organs/tissues for transplantation after brain-stem death. My family will be consulted before retrieval.
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('organ-pledge-modal')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="submitOrganPledge()">Submit Pledge & Download Card</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AZ_DEMO_CLIENT_ID&currency=USD&intent=capture" data-sdk-integration-source="button-factory" onerror="console.log('PayPal SDK not loaded - demo mode')"></script>
+<script src="app.js"></script>
+  <script src="voice-ai.js"></script>
+</body>
+</html>
